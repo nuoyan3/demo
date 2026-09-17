@@ -1,0 +1,2352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>浙江公路技师学院继续教育学院 · 教师工作台</title>
+<style>
+/* ============================================================
+   全局样式 - 清新教育风
+   ============================================================ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --primary: #4A90D9;
+  --primary-dark: #3A7BC0;
+  --primary-light: #E8F1FB;
+  --bg: #F7F9FC;
+  --text: #2C3E50;
+  --text-light: #7A8699;
+  --border: #E4EAF2;
+  --green: #52C41A;
+  --orange: #FA8C16;
+  --red: #F5222D;
+  --gray: #B8C2CF;
+  --radius: 12px;
+  --shadow: 0 2px 12px rgba(74,144,217,.08);
+  --shadow-lg: 0 8px 30px rgba(44,62,80,.15);
+}
+html, body { height: 100%; }
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  overflow: hidden;
+}
+button { font-family: inherit; cursor: pointer; }
+input, select, textarea { font-family: inherit; font-size: 14px; color: var(--text); outline: none; }
+
+/* ============================================================
+   顶部 Header
+   ============================================================ */
+.header {
+  height: 60px;
+  background: linear-gradient(90deg, #4A90D9 0%, #5DA0E4 100%);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px;
+  color: #fff;
+  position: relative; z-index: 100;
+  box-shadow: 0 2px 8px rgba(74,144,217,.25);
+}
+.header-left { display: flex; align-items: center; gap: 12px; }
+.header-logo {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: rgba(255,255,255,.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 700;
+}
+.header-title { font-size: 16px; font-weight: 600; letter-spacing: .5px; }
+.header-right { display: flex; align-items: center; gap: 16px; }
+.header-user { display: flex; align-items: center; gap: 10px; }
+.avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: #fff; color: var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 14px;
+  border: 2px solid rgba(255,255,255,.6);
+}
+.header-user .uname { font-size: 14px; font-weight: 500; }
+.header-user .urole { font-size: 12px; opacity: .8; }
+.btn-logout {
+  background: rgba(255,255,255,.18);
+  border: 1px solid rgba(255,255,255,.35);
+  color: #fff; padding: 6px 14px; border-radius: 6px; font-size: 13px;
+  transition: background .2s;
+}
+.btn-logout:hover { background: rgba(255,255,255,.32); }
+
+/* ============================================================
+   布局：侧边栏 + 主区域
+   ============================================================ */
+.layout { display: flex; height: calc(100vh - 60px); }
+.sidebar {
+  width: 210px; flex-shrink: 0;
+  background: #fff;
+  border-right: 1px solid var(--border);
+  padding: 16px 12px;
+  overflow-y: auto;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px; margin-bottom: 6px;
+  border-radius: 8px; cursor: pointer;
+  color: var(--text-light); font-size: 14px;
+  transition: all .2s; user-select: none;
+}
+.nav-item:hover { background: var(--bg); color: var(--primary); }
+.nav-item.active {
+  background: var(--primary-light); color: var(--primary);
+  font-weight: 600;
+  box-shadow: inset 3px 0 0 var(--primary);
+}
+.nav-icon { font-size: 16px; width: 20px; text-align: center; }
+.sidebar-foot {
+  margin-top: 24px; padding: 14px; border-radius: 8px;
+  background: var(--bg); font-size: 12px; color: var(--text-light); line-height: 1.7;
+}
+.main {
+  flex: 1; overflow-y: auto; padding: 24px 28px; position: relative;
+}
+.page { display: none; animation: pageIn .3s ease; }
+.page.active { display: block; }
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   通用组件
+   ============================================================ */
+.page-title { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+.page-sub { color: var(--text-light); font-size: 13px; margin-bottom: 20px; }
+.card {
+  background: #fff; border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 22px;
+  margin-bottom: 20px;
+}
+.card-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; }
+.card-title::before { content: none; }
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 18px; border-radius: 8px; border: 1px solid transparent;
+  font-size: 14px; transition: all .2s;
+}
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-dark); box-shadow: 0 4px 12px rgba(74,144,217,.35); }
+.btn-outline { background: #fff; color: var(--primary); border-color: var(--primary); }
+.btn-outline:hover { background: var(--primary-light); }
+.btn-ghost { background: var(--bg); color: var(--text-light); border-color: var(--border); }
+.btn-ghost:hover { color: var(--primary); border-color: var(--primary); }
+.btn-sm { padding: 4px 10px; font-size: 12px; border-radius: 6px; }
+.btn-danger-text { background: none; border: none; color: var(--red); font-size: 13px; padding: 4px 8px; }
+.btn-danger-text:hover { text-decoration: underline; }
+
+/* 表格 */
+.table-wrap { overflow-x: auto; }
+table.tbl { width: 100%; border-collapse: collapse; }
+.tbl th {
+  text-align: left; padding: 12px 14px;
+  background: var(--bg); color: var(--text-light);
+  font-weight: 600; font-size: 13px;
+  border-bottom: 1px solid var(--border); white-space: nowrap;
+}
+.tbl td { padding: 12px 14px; border-bottom: 1px solid var(--border); font-size: 13.5px; vertical-align: middle; }
+.tbl tr:hover td { background: #FAFCFF; }
+.tbl tr:last-child td { border-bottom: none; }
+.tag {
+  display: inline-block; padding: 2px 10px; border-radius: 20px;
+  font-size: 12px; font-weight: 500;
+}
+.tag-blue { background: var(--primary-light); color: var(--primary); }
+.tag-green { background: #EDF9E6; color: var(--green); }
+.tag-orange { background: #FFF4E5; color: var(--orange); }
+.tag-gray { background: #F0F2F5; color: var(--text-light); }
+.tag-purple { background: #F3ECFC; color: #8B5CF6; }
+.link-btn { background: none; border: none; color: var(--primary); font-size: 13px; padding: 2px 6px; }
+.link-btn:hover { text-decoration: underline; }
+
+/* 表单 */
+.form-row { margin-bottom: 16px; }
+.form-label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+.form-label .req { color: var(--red); margin-right: 2px; }
+.form-input, .form-select, .form-textarea {
+  width: 100%; padding: 9px 12px;
+  border: 1px solid var(--border); border-radius: 8px;
+  background: #fff; transition: border .2s, box-shadow .2s;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--primary); box-shadow: 0 0 0 3px rgba(74,144,217,.12);
+}
+.form-textarea { resize: vertical; min-height: 70px; }
+.form-inline { display: flex; gap: 16px; flex-wrap: wrap; }
+.form-inline .form-row { flex: 1; min-width: 160px; }
+.hint { font-size: 12px; color: var(--text-light); margin-top: 4px; }
+
+/* 进度条 */
+.progress {
+  width: 100%; min-width: 70px; height: 8px;
+  background: #EDF1F6; border-radius: 6px; overflow: hidden;
+}
+.progress-inner {
+  height: 100%; width: 0; border-radius: 6px;
+  transition: width 1s cubic-bezier(.25,.8,.25,1);
+}
+.pg-green { background: linear-gradient(90deg,#6DD400,#52C41A); }
+.pg-blue { background: linear-gradient(90deg,#6BA8E5,#4A90D9); }
+.pg-orange { background: linear-gradient(90deg,#FFB44D,#FA8C16); }
+.pg-gray { background: #C9D2DD; }
+.progress-cell { display: flex; align-items: center; gap: 8px; }
+.progress-cell .pct { font-size: 12px; color: var(--text-light); min-width: 34px; text-align: right; }
+
+/* 统计卡片 */
+.stat-row { display: flex; gap: 16px; flex-wrap: wrap; }
+.stat-card {
+  flex: 1; min-width: 160px;
+  background: #fff; border-radius: var(--radius); box-shadow: var(--shadow);
+  padding: 18px 20px; display: flex; align-items: center; gap: 14px;
+}
+.stat-icon {
+  width: 46px; height: 46px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center; font-size: 22px;
+}
+.stat-num { font-size: 24px; font-weight: 700; line-height: 1.2; }
+.stat-label { font-size: 12.5px; color: var(--text-light); margin-top: 2px; }
+
+/* 面包屑 */
+.breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-light); margin-bottom: 16px; }
+.breadcrumb a { color: var(--primary); text-decoration: none; cursor: pointer; }
+.breadcrumb a:hover { text-decoration: underline; }
+
+/* ============================================================
+   页面1：个人信息
+   ============================================================ */
+.profile-flex { display: flex; gap: 20px; flex-wrap: wrap; }
+.profile-card {
+  flex: 1.2; min-width: 320px;
+  background: #fff; border-radius: var(--radius); box-shadow: var(--shadow);
+  padding: 30px; text-align: center;
+}
+.profile-avatar {
+  width: 96px; height: 96px; border-radius: 50%;
+  background: linear-gradient(135deg,#4A90D9,#7FB3E8);
+  color: #fff; font-size: 34px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 14px;
+  box-shadow: 0 6px 18px rgba(74,144,217,.35);
+}
+.profile-name { font-size: 20px; font-weight: 700; }
+.profile-title-tag { margin: 8px 0 20px; }
+.profile-info { text-align: left; border-top: 1px solid var(--border); padding-top: 18px; }
+.pinfo-row { display: flex; padding: 9px 4px; font-size: 14px; border-bottom: 1px dashed var(--border); }
+.pinfo-row:last-child { border-bottom: none; }
+.pinfo-label { width: 90px; color: var(--text-light); flex-shrink: 0; }
+.pinfo-value { font-weight: 500; }
+.pwd-card { flex: 1; min-width: 320px; }
+
+/* ============================================================
+   页面3：课程包卡片 & 章节编辑器
+   ============================================================ */
+.pkg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+.pkg-card {
+  background: #fff; border-radius: var(--radius); box-shadow: var(--shadow);
+  padding: 22px; cursor: pointer; transition: all .25s;
+  border: 2px solid transparent; position: relative; overflow: hidden;
+}
+.pkg-card::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg,#4A90D9,#8FBEED);
+}
+.pkg-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--primary-light); }
+.pkg-card-name { font-size: 16px; font-weight: 700; margin-bottom: 10px; line-height: 1.4; }
+.pkg-card-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.pkg-card-foot { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 12px; }
+.pkg-card-actions { display: flex; gap: 6px; }
+
+.editor-top {
+  background: #fff; border-radius: var(--radius); box-shadow: var(--shadow);
+  padding: 22px; margin-bottom: 18px;
+}
+.editor-top-grid { display: grid; grid-template-columns: 1fr 1fr 140px; gap: 16px; align-items: end; }
+.total-hours-box {
+  background: var(--primary-light); border-radius: 10px;
+  padding: 12px 16px; text-align: center;
+}
+.total-hours-num { font-size: 26px; font-weight: 800; color: var(--primary); line-height: 1.2; }
+.total-hours-label { font-size: 12px; color: var(--text-light); }
+
+.sec-card {
+  background: #fff; border-radius: var(--radius); box-shadow: var(--shadow);
+  margin-bottom: 14px; border: 1px solid var(--border); overflow: hidden;
+  transition: box-shadow .2s;
+}
+.sec-card:hover { box-shadow: var(--shadow-lg); }
+.sec-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 18px; cursor: pointer; background: linear-gradient(90deg,#FBFDFF,#F4F8FD);
+  user-select: none;
+}
+.sec-chevron { transition: transform .25s; color: var(--text-light); font-size: 12px; width: 16px; }
+.sec-card.collapsed .sec-chevron { transform: rotate(-90deg); }
+.sec-index {
+  width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0;
+  background: var(--primary); color: #fff; font-weight: 700; font-size: 13px;
+  display: flex; align-items: center; justify-content: center;
+}
+.sec-name-input {
+  flex: 1; font-size: 15px; font-weight: 600;
+  border: 1px solid transparent; border-radius: 6px;
+  padding: 5px 8px; background: transparent; transition: all .2s; min-width: 120px;
+}
+.sec-name-input:hover { border-color: var(--border); background: #fff; }
+.sec-name-input:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 3px rgba(74,144,217,.1); }
+.sec-hours-tag {
+  background: var(--primary-light); color: var(--primary);
+  padding: 3px 12px; border-radius: 20px; font-size: 12.5px; font-weight: 600; white-space: nowrap;
+}
+.sec-actions { display: flex; gap: 2px; }
+.icon-btn {
+  background: none; border: none; color: var(--text-light);
+  padding: 4px 7px; border-radius: 6px; font-size: 13px; transition: all .15s;
+}
+.icon-btn:hover { background: var(--primary-light); color: var(--primary); }
+.icon-btn.danger:hover { background: #FFECEC; color: var(--red); }
+.sec-body { padding: 6px 18px 16px; border-top: 1px solid var(--border); }
+.sec-card.collapsed .sec-body { display: none; }
+
+.course-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 12px; margin-top: 8px;
+  border: 1px solid var(--border); border-radius: 10px;
+  background: #fff; transition: all .2s;
+}
+.course-item:hover { border-color: #BBD6F0; background: #FAFCFF; }
+.course-item.dragging { opacity: .5; border-style: dashed; }
+.ci-icon {
+  width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 17px;
+}
+.ci-icon.t-video { background: #E8F1FB; }
+.ci-icon.t-doc { background: #FFF4E5; }
+.ci-icon.t-exercise { background: #EDF9E6; }
+.ci-icon.t-exam { background: #F3ECFC; }
+.ci-name { flex: 1; font-size: 14px; font-weight: 500; min-width: 100px; }
+.ci-hours { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.ci-hours input {
+  width: 58px; padding: 5px 8px; text-align: center;
+  border: 1px solid var(--border); border-radius: 6px; font-size: 13px;
+}
+.ci-hours input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(74,144,217,.1); }
+.ci-hours span { font-size: 12px; color: var(--text-light); }
+.ci-actions { display: flex; gap: 2px; flex-shrink: 0; }
+.sec-add-bar { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+.add-new-sec {
+  width: 100%; padding: 14px; border: 2px dashed #C3D7EC; border-radius: var(--radius);
+  background: transparent; color: var(--primary); font-size: 14px; font-weight: 600;
+  transition: all .2s; margin-bottom: 18px;
+}
+.add-new-sec:hover { background: var(--primary-light); border-color: var(--primary); }
+
+/* ============================================================
+   弹窗 Modal
+   ============================================================ */
+.modal-mask {
+  position: fixed; inset: 0; background: rgba(30,42,58,.45);
+  display: none; align-items: center; justify-content: center;
+  z-index: 1000; backdrop-filter: blur(2px);
+}
+.modal-mask.show { display: flex; animation: fadeIn .2s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* 右侧滑出抽屉（资源预览） */
+.drawer-mask {
+  position: fixed; inset: 0; background: rgba(30,42,58,.45);
+  opacity: 0; visibility: hidden; transition: opacity .3s ease, visibility .3s;
+  z-index: 1200; backdrop-filter: blur(2px);
+}
+.drawer-mask.show { opacity: 1; visibility: visible; }
+.drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 1201;
+  width: 580px; max-width: 94vw; background: #fff; box-shadow: -12px 0 40px rgba(44,62,80,.22);
+  transform: translateX(102%); transition: transform .32s cubic-bezier(.25,.8,.35,1);
+  display: flex; flex-direction: column;
+}
+.drawer.show { transform: translateX(0); }
+.drawer-head {
+  padding: 18px 24px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-shrink: 0;
+}
+.drawer-title { font-size: 16px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.drawer-body { flex: 1; overflow-y: auto; padding: 20px 24px; }
+.drawer-foot {
+  padding: 14px 24px; border-top: 1px solid var(--border);
+  display: flex; justify-content: flex-end; gap: 10px; flex-shrink: 0;
+}
+.modal {
+  background: #fff; border-radius: 14px; box-shadow: var(--shadow-lg);
+  width: 560px; max-width: calc(100vw - 40px);
+  max-height: calc(100vh - 80px); display: flex; flex-direction: column;
+  animation: modalIn .25s ease;
+}
+.modal.wide { width: 720px; }
+@keyframes modalIn { from { opacity: 0; transform: translateY(20px) scale(.97); } to { opacity: 1; transform: none; } }
+.modal-head {
+  padding: 18px 24px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.modal-title { font-size: 16px; font-weight: 700; }
+.modal-close { background: none; border: none; font-size: 20px; color: var(--text-light); line-height: 1; padding: 4px 8px; border-radius: 6px; }
+.modal-close:hover { background: var(--bg); color: var(--red); }
+.modal-body { padding: 22px 24px; overflow-y: auto; }
+.modal-foot {
+  padding: 14px 24px; border-top: 1px solid var(--border);
+  display: flex; justify-content: flex-end; gap: 10px;
+}
+
+/* 上传拖拽区 */
+.drop-zone {
+  border: 2px dashed #B9D2EA; border-radius: 12px;
+  padding: 34px 20px; text-align: center; cursor: pointer;
+  background: #FAFCFF; transition: all .2s; margin-bottom: 18px;
+}
+.drop-zone:hover, .drop-zone.dragover { border-color: var(--primary); background: var(--primary-light); }
+.drop-zone .dz-icon { font-size: 38px; margin-bottom: 8px; }
+.drop-zone .dz-text { font-size: 14px; font-weight: 600; color: var(--primary); }
+.drop-zone .dz-sub { font-size: 12px; color: var(--text-light); margin-top: 4px; }
+.upload-file-chip {
+  display: none; align-items: center; gap: 10px;
+  background: var(--primary-light); border-radius: 8px;
+  padding: 10px 14px; margin-bottom: 16px; font-size: 13px;
+}
+.upload-file-chip.show { display: flex; }
+.upload-progress { display: none; margin-bottom: 16px; }
+.upload-progress.show { display: block; }
+.up-auto { display: none; flex-wrap: wrap; gap: 10px; }
+.up-auto.show { display: flex; }
+.auto-cell { background: var(--primary-light); border: 1px dashed var(--border); border-radius: 10px; padding: 8px 14px; font-size: 12px; color: var(--text-light); }
+.auto-cell b { display: block; color: var(--text); font-size: 13px; margin-top: 2px; font-weight: 600; }
+
+/* 添加课程 - 资源选择列表 */
+.res-search { margin-bottom: 12px; position: relative; }
+.res-search input { width: 100%; padding: 9px 12px 9px 34px; border: 1px solid var(--border); border-radius: 8px; }
+.res-search::before { content: "🔍"; position: absolute; left: 10px; top: 8px; font-size: 14px; opacity: .6; }
+.res-select-list { max-height: 300px; overflow-y: auto; border: 1px solid var(--border); border-radius: 10px; }
+.res-select-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 14px; border-bottom: 1px solid var(--border);
+  cursor: pointer; transition: background .15s;
+}
+.res-select-item:last-child { border-bottom: none; }
+.res-select-item:hover { background: #FAFCFF; }
+.res-select-item.checked { background: var(--primary-light); }
+.res-select-item input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--primary); cursor: pointer; }
+.res-sel-info { flex: 1; }
+.res-sel-name { font-size: 13.5px; font-weight: 500; }
+.res-sel-meta { font-size: 12px; color: var(--text-light); margin-top: 2px; }
+.sel-count-bar {
+  margin-top: 12px; padding: 9px 14px; border-radius: 8px;
+  background: var(--bg); font-size: 13px; color: var(--text-light);
+}
+.sel-count-bar b { color: var(--primary); font-size: 15px; }
+
+/* 预览弹窗内容 */
+.preview-stage {
+  background: #1E2A3A; border-radius: 10px; height: 260px;
+  display: flex; flex-items: center; justify-content: center; flex-direction: column;
+  color: #fff; gap: 12px; margin-bottom: 14px;
+}
+.preview-play {
+  width: 62px; height: 62px; border-radius: 50%;
+  background: rgba(255,255,255,.15); border: 2px solid rgba(255,255,255,.5);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; cursor: pointer; transition: all .2s;
+}
+.preview-play:hover { background: var(--primary); border-color: var(--primary); transform: scale(1.08); }
+.preview-meta-line { display: flex; gap: 20px; font-size: 13px; color: var(--text-light); flex-wrap: wrap; }
+.doc-page-mock { display: flex; gap: 10px; justify-content: center; }
+.doc-page {
+  width: 90px; height: 120px; background: #fff; border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.3);
+  padding: 10px 8px; overflow: hidden;
+}
+.doc-page .ln { height: 5px; background: #E4EAF2; border-radius: 3px; margin-bottom: 6px; }
+.doc-page .ln.w60 { width: 60%; } .doc-page .ln.w80 { width: 80%; }
+.doc-page .ttl { height: 9px; width: 70%; background: #C9D8EA; border-radius: 3px; margin-bottom: 9px; }
+
+/* ============================================================
+   Toast
+   ============================================================ */
+.toast-wrap { position: fixed; top: 76px; left: 50%; transform: translateX(-50%); z-index: 2000; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+.toast {
+  background: #fff; border-radius: 10px; box-shadow: var(--shadow-lg);
+  padding: 12px 22px; font-size: 14px; display: flex; align-items: center; gap: 10px;
+  animation: toastIn .3s ease; border-left: 4px solid var(--green);
+}
+.toast.err { border-left-color: var(--red); }
+.toast.info { border-left-color: var(--primary); }
+.toast.hide { animation: toastOut .3s ease forwards; }
+@keyframes toastIn { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: none; } }
+@keyframes toastOut { to { opacity: 0; transform: translateY(-16px); } }
+
+/* 空状态 */
+.empty { text-align: center; padding: 40px 0; color: var(--text-light); }
+.empty .e-icon { font-size: 40px; margin-bottom: 10px; opacity: .5; }
+
+/* checkbox 行内 */
+.chk-line { display: flex; align-items: center; gap: 8px; font-size: 13.5px; padding: 5px 0; cursor: pointer; }
+.chk-line input { width: 15px; height: 15px; accent-color: var(--primary); }
+
+/* 学习进度筛选栏 */
+.filter-bar { display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 18px; }
+.filter-bar .form-row { margin-bottom: 0; min-width: 220px; }
+.mini-progress { min-width: 90px; }
+.score-badge { font-weight: 700; }
+.score-pass { color: var(--green); }
+.score-fail { color: var(--red); }
+.score-none { color: var(--gray); }
+
+/* 学习进度：可展开明细 */
+.exp-caret {
+  display: inline-flex; width: 22px; height: 22px; border-radius: 6px;
+  align-items: center; justify-content: center; color: var(--text-light);
+  transition: transform .2s, background .2s; cursor: pointer; font-size: 12px;
+}
+.exp-caret:hover { background: #EDF1F6; color: var(--primary); }
+.exp-caret.open { transform: rotate(90deg); color: var(--primary); }
+.detail-cell { padding: 0 !important; background: #F7FAFD; }
+.detail-inner { padding: 16px 22px 18px; }
+.detail-inner .di-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.sec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.sec-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
+.sec-card .sc-name { font-size: 13px; font-weight: 600; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.sec-card .sc-score { font-size: 12px; }
+.sec-card .sc-foot { margin-top: 8px; font-size: 12px; color: var(--text-light); display: flex; justify-content: space-between; }
+.tag-hase { color: var(--primary); }
+
+@media (max-width: 900px) {
+  .editor-top-grid { grid-template-columns: 1fr; }
+  .sidebar { width: 64px; padding: 12px 8px; }
+  .nav-item span.nav-text, .sidebar-foot { display: none; }
+  .nav-item { justify-content: center; padding: 12px 0; }
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+
+<!-- ============================================================
+     顶部 Header
+     ============================================================ -->
+<header class="header">
+  <div class="header-left">
+    <div class="header-logo">继</div>
+    <div class="header-title">浙江公路技师学院继续教育学院 · 教师工作台</div>
+  </div>
+  <div class="header-right">
+    <div class="header-user">
+      <div class="avatar">王</div>
+      <div>
+        <div class="uname">王建国</div>
+        <div class="urole">公路工程学院 · 副教授</div>
+      </div>
+    </div>
+    <button class="btn-logout" onclick="doLogout()">退出登录</button>
+  </div>
+</header>
+
+<div class="layout">
+  <!-- ============================================================
+       左侧导航
+       ============================================================ -->
+  <aside class="sidebar">
+    <div class="nav-item active" data-page="profile" onclick="switchPage('profile', this)">
+      <span class="nav-icon">&#128100;</span><span class="nav-text">个人信息</span>
+    </div>
+    <div class="nav-item" data-page="resources" onclick="switchPage('resources', this)">
+      <span class="nav-icon">&#128193;</span><span class="nav-text">我的资源库</span>
+    </div>
+    <div class="nav-item" data-page="packages" onclick="switchPage('packages', this)">
+      <span class="nav-icon">&#128218;</span><span class="nav-text">课程包管理</span>
+    </div>
+    <div class="nav-item" data-page="classes" onclick="switchPage('classes', this)">
+      <span class="nav-icon">&#127979;</span><span class="nav-text">培训班管理</span>
+    </div>
+    <div class="nav-item" data-page="progress" onclick="switchPage('progress', this)">
+      <span class="nav-icon">&#128200;</span><span class="nav-text">学习进度</span>
+    </div>
+    <div class="sidebar-foot">
+      2026年春季学期<br>在线培训系统 v2.6<br>技术支持：继续教育学院
+    </div>
+  </aside>
+
+  <!-- ============================================================
+       主内容区
+       ============================================================ -->
+  <main class="main">
+
+    <!-- ==================== 页面1：个人信息 ==================== -->
+    <section class="page active" id="page-profile">
+      <div class="page-title">个人信息</div>
+      <div class="page-sub">查看和维护您的账号资料，定期修改密码可保障账号安全</div>
+
+      <div class="stat-row" style="margin-bottom:20px;">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#E8F1FB;">&#128218;</div>
+          <div><div class="stat-num" id="stat-pkg">3</div><div class="stat-label">已创建课程包</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#EDF9E6;">&#127979;</div>
+          <div><div class="stat-num" id="stat-cls">2</div><div class="stat-label">管理培训班</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#FFF4E5;">&#128193;</div>
+          <div><div class="stat-num" id="stat-res">6</div><div class="stat-label">上传资源</div></div>
+        </div>
+      </div>
+
+      <div class="profile-flex">
+        <div class="profile-card">
+          <div class="profile-avatar">王建国</div>
+          <div class="profile-name">王建国</div>
+          <div class="profile-title-tag"><span class="tag tag-blue">副教授</span> <span class="tag tag-green">在职教师</span></div>
+          <div class="profile-info">
+            <div class="pinfo-row"><div class="pinfo-label">账号</div><div class="pinfo-value">wangjg</div></div>
+            <div class="pinfo-row"><div class="pinfo-label">所属学院</div><div class="pinfo-value">公路工程学院</div></div>
+            <div class="pinfo-row"><div class="pinfo-label">手机号码</div><div class="pinfo-value">138****5621</div></div>
+            <div class="pinfo-row"><div class="pinfo-label">邮箱</div><div class="pinfo-value">wangjg@zjglxy.edu.cn</div></div>
+            <div class="pinfo-row"><div class="pinfo-label">职称</div><div class="pinfo-value">副教授</div></div>
+          </div>
+        </div>
+
+        <div class="card pwd-card">
+          <div class="card-title">修改密码</div>
+          <div class="form-row">
+            <label class="form-label"><span class="req">*</span>原密码</label>
+            <input type="password" class="form-input" id="pwd-old" placeholder="请输入原密码">
+          </div>
+          <div class="form-row">
+            <label class="form-label"><span class="req">*</span>新密码</label>
+            <input type="password" class="form-input" id="pwd-new" placeholder="8-20位，须包含字母和数字">
+          </div>
+          <div class="form-row">
+            <label class="form-label"><span class="req">*</span>确认新密码</label>
+            <input type="password" class="form-input" id="pwd-confirm" placeholder="请再次输入新密码">
+            <div class="hint">修改成功后需要重新登录，请牢记新密码</div>
+          </div>
+          <button class="btn btn-primary" onclick="savePassword()">保存新密码</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 页面2：我的资源库 ==================== -->
+    <section class="page" id="page-resources">
+      <div class="page-title">我的资源库</div>
+      <div class="page-sub">管理您上传的教学视频、课件与文档，可在课程包中直接引用</div>
+      <div class="card">
+        <div class="card-title">
+          <span>资源列表（共 <span id="res-count">6</span> 个）</span>
+          <button class="btn btn-primary" onclick="openUploadModal()">＋ 上传资源</button>
+        </div>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th style="width:34%;">文件名</th><th>类型</th><th>大小</th><th>时长</th><th>上传时间</th><th style="width:170px;">操作</th>
+              </tr>
+            </thead>
+            <tbody id="res-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 页面3：课程包管理 ==================== -->
+    <section class="page" id="page-packages">
+      <!-- Level 1: 课程包列表 -->
+      <div id="pkg-list-view">
+        <div class="page-title">课程包管理</div>
+        <div class="page-sub">课程包由多个"节"组成，每节包含视频课程、练习与考核，点击卡片进入章节结构编辑</div>
+        <div style="margin-bottom:18px;">
+          <button class="btn btn-primary" onclick="openNewPkgModal()">＋ 新建课程包</button>
+        </div>
+        <div class="pkg-grid" id="pkg-grid"></div>
+      </div>
+
+      <!-- Level 2: 课程包编辑（章节结构编辑器） -->
+      <div id="pkg-editor-view" style="display:none;">
+        <div class="breadcrumb">
+          <a onclick="exitPkgEditor()">课程包管理</a><span>/</span><span id="pkg-editor-crumb">编辑课程包</span>
+        </div>
+        <div class="editor-top">
+          <div class="editor-top-grid">
+            <div class="form-row" style="margin-bottom:0;">
+              <label class="form-label"><span class="req">*</span>课程包名称</label>
+              <input type="text" class="form-input" id="pkg-edit-name" placeholder="请输入课程包名称">
+            </div>
+            <div class="form-row" style="margin-bottom:0;">
+              <label class="form-label">课程包描述</label>
+              <textarea class="form-textarea" id="pkg-edit-desc" rows="1" placeholder="简要描述课程包内容与适用对象" style="min-height:40px;"></textarea>
+            </div>
+            <div class="total-hours-box">
+              <div class="total-hours-num" id="pkg-total-hours">0</div>
+              <div class="total-hours-label">总学时（自动计算）</div>
+            </div>
+          </div>
+        </div>
+        <div id="sections-container"></div>
+        <button class="add-new-sec" onclick="addSection()">＋ 新建节</button>
+        <div style="display:flex; gap:12px; justify-content:flex-end;">
+          <button class="btn btn-ghost" onclick="exitPkgEditor()">取消</button>
+          <button class="btn btn-primary" onclick="savePackage()">&#128190; 保存课程包</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 页面4：培训班管理 ==================== -->
+    <section class="page" id="page-classes">
+      <!-- 班级列表 -->
+      <div id="cls-list-view">
+        <div class="page-title">培训班管理</div>
+        <div class="page-sub">管理您负责的培训班，可为班级关联课程包并维护学员名单</div>
+        <div class="card">
+          <div class="card-title">
+            <span>培训班列表</span>
+            <button class="btn btn-primary" onclick="openNewClsModal()">＋ 创建培训班</button>
+          </div>
+          <div class="table-wrap">
+            <table class="tbl">
+              <thead>
+                <tr>
+                  <th>班级名称</th><th>培训年度</th><th>起止时间</th><th>关联课程包</th><th>学员数</th><th>状态</th><th style="width:230px;">操作</th>
+                </tr>
+              </thead>
+              <tbody id="cls-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 查看学员（全宽子页面） -->
+      <div id="cls-students-view" style="display:none;">
+        <div class="breadcrumb">
+          <a onclick="exitStudentsView()">培训班管理</a><span>/</span><span id="stu-crumb">查看学员</span>
+        </div>
+        <div class="page-title" id="stu-page-title">班级学员</div>
+        <div class="page-sub" id="stu-page-sub"></div>
+        <div class="card">
+          <div class="card-title">
+            <span>学员名单（共 <span id="stu-count">0</span> 人）</span>
+            <span>
+              <button class="btn btn-outline btn-sm" onclick="exportStudents()">⬇ 导出学员数据</button>
+            </span>
+          </div>
+          <div class="table-wrap">
+            <table class="tbl">
+              <thead>
+                <tr>
+                  <th>姓名</th><th>单位</th><th>手机</th><th style="width:200px;">学习进度</th><th>已完成学时 / 总学时</th><th>考核状态</th>
+                </tr>
+              </thead>
+              <tbody id="cls-stu-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 页面5：学习进度 ==================== -->
+    <section class="page" id="page-progress">
+      <div class="page-title">学习进度</div>
+      <div class="page-sub">按培训班与课程包查看每位学员各课程的学习进度与考核成绩</div>
+
+      <div class="card">
+        <div class="filter-bar">
+          <div class="form-row">
+            <label class="form-label">开班月份</label>
+            <select class="form-select" id="prog-month-select" style="min-width:150px;" onchange="fillProgressSelects()">
+              <option value="">全部月份</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label class="form-label">选择培训班</label>
+            <select class="form-select" id="prog-cls-select" onchange="syncPkgSelect()"></select>
+          </div>
+          <div class="form-row">
+            <label class="form-label">选择课程包</label>
+            <select class="form-select" id="prog-pkg-select" onchange="renderProgressPage()"></select>
+          </div>
+          <button class="btn btn-outline" onclick="exportProgress()">⬇ 导出Excel</button>
+        </div>
+
+        <div class="stat-row" id="prog-stats"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>学员进度明细<span style="font-weight:400;color:var(--text-light);font-size:12px;margin-left:8px;">默认显示总进度，点击行首箭头展开各节进度与考核成绩</span></span>
+          <span style="display:inline-flex;gap:8px;">
+            <button class="btn btn-ghost btn-sm" onclick="expandAll(true)">全部展开</button>
+            <button class="btn btn-ghost btn-sm" onclick="expandAll(false)">全部收起</button>
+          </span>
+        </div>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead id="prog-thead"></thead>
+            <tbody id="prog-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ============================================================
+     弹窗：上传资源
+     ============================================================ -->
+<div class="modal-mask" id="modal-upload">
+  <div class="modal wide">
+    <div class="modal-head">
+      <div class="modal-title" id="upload-modal-title">上传资源</div>
+      <button class="modal-close" onclick="closeModal('modal-upload')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+        <div class="dz-icon">&#128228;</div>
+        <div class="dz-text">点击选择文件，或将文件拖拽到此处</div>
+        <div class="dz-sub">支持 MP4 / PPT / PPTX / PDF / DOC / DOCX，单个文件不超过 2GB</div>
+      </div>
+      <input type="file" id="file-input" style="display:none;" onchange="onFileChosen(this)">
+      <div class="upload-file-chip" id="upload-chip">
+        <span>&#128206;</span><span id="upload-chip-name"></span>
+        <button class="link-btn" style="margin-left:auto;" onclick="clearChosenFile()">移除</button>
+      </div>
+      <div class="upload-progress" id="upload-progress">
+        <div class="progress" style="height:10px;"><div class="progress-inner pg-blue" id="upload-progress-bar"></div></div>
+        <div class="hint" id="upload-progress-text" style="margin-top:6px;">正在上传… 0%</div>
+      </div>
+      <div class="form-row">
+        <label class="form-label"><span class="req">*</span>课程名称</label>
+        <input type="text" class="form-input" id="up-name" placeholder="如：公路工程质量检测技术">
+      </div>
+      <div class="form-inline">
+        <div class="form-row" style="max-width:200px;">
+          <label class="form-label">讲师</label>
+          <input type="text" class="form-input" id="up-teacher" placeholder="如：王建国">
+        </div>
+        <div class="form-row">
+          <label class="form-label">讲师单位</label>
+          <input type="text" class="form-input" id="up-unit" placeholder="如：浙江省交通科学研究院">
+        </div>
+      </div>
+      <div class="form-row">
+        <label class="form-label">讲师简介</label>
+        <textarea class="form-textarea" id="up-intro" placeholder="选填：简要介绍讲师的职称、专长与代表性成果"></textarea>
+      </div>
+      <div class="form-row" style="margin-bottom:0;">
+        <label class="form-label">系统自动识别<span style="color:var(--text-light);font-weight:400;">（选择文件后自动生成，无需填写）</span></label>
+        <div class="up-auto" id="up-auto">
+          <div class="auto-cell">文件类型<b id="af-type">待上传</b></div>
+          <div class="auto-cell">文件大小<b id="af-size">—</b></div>
+          <div class="auto-cell">视频时长<b id="af-dur">—</b></div>
+          <div class="auto-cell">上传时间<b id="af-date">—</b></div>
+        </div>
+        <div class="hint" id="up-auto-tip" style="margin-top:2px;">尚未选择文件，类型 / 大小 / 时长将在选择文件后自动识别。</div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('modal-upload')">取消</button>
+      <button class="btn btn-primary" id="upload-confirm-btn" onclick="confirmUpload()">开始上传</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     抽屉：资源预览（右侧滑出）
+     ============================================================ -->
+<div class="drawer-mask" id="drawer-preview-mask" onclick="closeDrawer('drawer-preview')"></div>
+<div class="drawer" id="drawer-preview">
+  <div class="drawer-head">
+    <div class="drawer-title" id="preview-title">资源预览</div>
+    <button class="modal-close" onclick="closeDrawer('drawer-preview')">×</button>
+  </div>
+  <div class="drawer-body" id="preview-body"></div>
+  <div class="drawer-foot">
+    <button class="btn btn-ghost" onclick="closeDrawer('drawer-preview')">关闭</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     弹窗：新建课程包
+     ============================================================ -->
+<div class="modal-mask" id="modal-new-pkg">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">新建课程包</div>
+      <button class="modal-close" onclick="closeModal('modal-new-pkg')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <label class="form-label"><span class="req">*</span>课程包名称</label>
+        <input type="text" class="form-input" id="new-pkg-name" placeholder="如：2026年桥梁检测员继续教育课程包">
+      </div>
+      <div class="form-row">
+        <label class="form-label">课程包描述</label>
+        <textarea class="form-textarea" id="new-pkg-desc" placeholder="简要描述课程包内容与适用对象"></textarea>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('modal-new-pkg')">取消</button>
+      <button class="btn btn-primary" onclick="createPackage()">创建并编辑章节</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     弹窗：添加课程（从资源库选择）
+     ============================================================ -->
+<div class="modal-mask" id="modal-add-course">
+  <div class="modal wide">
+    <div class="modal-head">
+      <div class="modal-title">添加课程 · 从我的资源库选择</div>
+      <button class="modal-close" onclick="closeModal('modal-add-course')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="res-search">
+        <input type="text" id="course-search-input" placeholder="搜索资源名称…" oninput="renderCourseSelectList()">
+      </div>
+      <div class="res-select-list" id="course-select-list"></div>
+      <div class="sel-count-bar">已选择 <b id="course-sel-count">0</b> 个资源，添加后可在章节中调整学时</div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('modal-add-course')">取消</button>
+      <button class="btn btn-primary" onclick="confirmAddCourses()">确认添加</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     弹窗：添加练习
+     ============================================================ -->
+<div class="modal-mask" id="modal-add-exercise">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">添加练习</div>
+      <button class="modal-close" onclick="closeModal('modal-add-exercise')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <label class="form-label"><span class="req">*</span>练习名称</label>
+        <input type="text" class="form-input" id="ex-name" placeholder="如：章节练习四">
+      </div>
+      <div class="form-row">
+        <label class="form-label"><span class="req">*</span>选择题库</label>
+        <select class="form-select" id="ex-bank">
+          <option value="公路养护基础知识题库">公路养护基础知识题库（326题）</option>
+          <option value="桥梁养护技术题库">桥梁养护技术题库（218题）</option>
+          <option value="道路施工安全题库">道路施工安全题库（402题）</option>
+          <option value="路面检测技术题库">路面检测技术题库（157题）</option>
+        </select>
+      </div>
+      <div class="form-inline">
+        <div class="form-row">
+          <label class="form-label"><span class="req">*</span>题目数量</label>
+          <input type="number" class="form-input" id="ex-count" value="20" min="1" max="200">
+        </div>
+        <div class="form-row">
+          <label class="form-label"><span class="req">*</span>答题时限（分钟）</label>
+          <input type="number" class="form-input" id="ex-time" value="30" min="1">
+        </div>
+        <div class="form-row">
+          <label class="form-label"><span class="req">*</span>及格分</label>
+          <input type="number" class="form-input" id="ex-pass" value="60" min="0" max="100">
+        </div>
+      </div>
+      <div class="form-inline">
+        <div class="form-row" style="max-width:170px;">
+          <label class="form-label">学时</label>
+          <input type="number" class="form-input" id="ex-hours" value="1" min="0.5" step="0.5">
+        </div>
+        <div class="form-row">
+          <label class="form-label">练习次数</label>
+          <select class="form-select" id="ex-attempts">
+            <option value="不限次数">不限次数</option>
+            <option value="3次">3次</option>
+            <option value="5次">5次</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('modal-add-exercise')">取消</button>
+      <button class="btn btn-primary" onclick="confirmAddExercise()">确认添加</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     弹窗：添加考核
+     ============================================================ -->
+<div class="modal-mask" id="modal-add-exam">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">添加考核</div>
+      <button class="modal-close" onclick="closeModal('modal-add-exam')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <label class="form-label"><span class="req">*</span>考核名称</label>
+        <input type="text" class="form-input" id="exam-name" placeholder="如：结业考核">
+      </div>
+      <div class="form-row">
+        <label class="form-label"><span class="req">*</span>选择题库</label>
+        <select class="form-select" id="exam-bank">
+          <option value="公路养护基础知识题库">公路养护基础知识题库（326题）</option>
+          <option value="桥梁养护技术题库">桥梁养护技术题库（218题）</option>
+          <option value="道路施工安全题库">道路施工安全题库（402题）</option>
+          <option value="综合结业题库">综合结业题库（560题）</option>
+        </select>
+      </div>
+      <div class="form-inline">
+        <div class="form-row">
+          <label class="form-label"><span class="req">*</span>题目数量</label>
+          <input type="number" class="form-input" id="exam-count" value="50" min="1" max="200">
+        </div>
+        <div class="form-row">
+          <label class="form-label"><span class="req">*</span>考试时限（分钟）</label>
+          <input type="number" class="form-input" id="exam-time" value="90" min="1">
+        </div>
+        <div class="form-row">
+          <label class="form-label"><span class="req">*</span>及格分</label>
+          <input type="number" class="form-input" id="exam-pass" value="80" min="0" max="100">
+        </div>
+      </div>
+      <div class="form-inline">
+        <div class="form-row">
+          <label class="form-label"><span class="req">*</span>考试次数限制</label>
+          <select class="form-select" id="exam-attempts">
+            <option value="1次">仅可考 1 次</option>
+            <option value="2次" selected>最多 2 次（含补考）</option>
+            <option value="3次">最多 3 次</option>
+          </select>
+        </div>
+        <div class="form-row" style="max-width:170px;">
+          <label class="form-label">学时</label>
+          <input type="number" class="form-input" id="exam-hours" value="2" min="0.5" step="0.5">
+        </div>
+      </div>
+      <div class="form-row">
+        <label class="form-label">防作弊设置</label>
+        <label class="chk-line"><input type="checkbox" id="exam-anti-random" checked> 随机组卷（每人题目/选项顺序不同）</label>
+        <label class="chk-line"><input type="checkbox" id="exam-anti-switch" checked> 切屏限制（切屏超过 3 次自动交卷）</label>
+        <label class="chk-line"><input type="checkbox" id="exam-anti-face"> 考中人脸抓拍比对</label>
+        <label class="chk-line"><input type="checkbox" id="exam-anti-copy" checked> 禁止复制粘贴题目内容</label>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('modal-add-exam')">取消</button>
+      <button class="btn btn-primary" onclick="confirmAddExam()">确认添加</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     弹窗：创建培训班
+     ============================================================ -->
+<div class="modal-mask" id="modal-new-cls">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">创建培训班</div>
+      <button class="modal-close" onclick="closeModal('modal-new-cls')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <label class="form-label"><span class="req">*</span>班级名称</label>
+        <input type="text" class="form-input" id="new-cls-name" placeholder="如：2026年公路养护工继续教育第三期">
+      </div>
+      <div class="form-inline">
+        <div class="form-row">
+          <label class="form-label"><span class="req">*</span>培训年度</label>
+          <select class="form-select" id="new-cls-year">
+            <option value="2026">2026年</option>
+            <option value="2027">2027年</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label class="form-label"><span class="req">*</span>开始日期</label>
+          <input type="date" class="form-input" id="new-cls-start" value="2026-03-01">
+        </div>
+        <div class="form-row">
+          <label class="form-label"><span class="req">*</span>结束日期</label>
+          <input type="date" class="form-input" id="new-cls-end" value="2026-06-30">
+        </div>
+      </div>
+      <div class="form-row">
+        <label class="form-label"><span class="req">*</span>关联课程包</label>
+        <select class="form-select" id="new-cls-pkg"></select>
+        <div class="hint">同一课程包可关联多个培训班；创建后也可在班级列表中调整</div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('modal-new-cls')">取消</button>
+      <button class="btn btn-primary" onclick="createClass()">创建培训班</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     弹窗：导入学员
+     ============================================================ -->
+<div class="modal-mask" id="modal-import-stu">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">导入学员 · <span id="import-cls-name"></span></div>
+      <button class="modal-close" onclick="closeModal('modal-import-stu')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="drop-zone" onclick="simulateImportFile()">
+        <div class="dz-icon">&#128202;</div>
+        <div class="dz-text">点击选择 Excel 文件，或将文件拖拽到此处</div>
+        <div class="dz-sub">支持 .xlsx / .xls，单次最多导入 500 人</div>
+      </div>
+      <div style="background:var(--primary-light); border-radius:10px; padding:14px 16px; margin-bottom:14px;">
+        <div style="font-weight:600; margin-bottom:6px; color:var(--primary);">&#128221; 导入须知</div>
+        <div style="font-size:13px; line-height:1.9; color:var(--text);">
+          1. 请使用标准模板填写学员信息（姓名、单位、手机号、身份证号）；<br>
+          2. <b>同一学员可在多个培训班中</b>，重复导入不会覆盖其已有学习记录；<br>
+          3. 手机号将作为学员登录账号，请确保准确无误。
+        </div>
+      </div>
+      <button class="btn btn-ghost" onclick="downloadTemplate()">⬇ 下载学员导入模板.xlsx</button>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal('modal-import-stu')">取消</button>
+      <button class="btn btn-primary" onclick="confirmImport()">确认导入</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast 容器 -->
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<script>
+/* ============================================================
+   全局数据
+   ============================================================ */
+// 我的资源库
+let resources = [
+  { name: '公路工程质量检测技术.mp4', type: '视频', size: '856MB', dur: '45:20', date: '2026-01-15', desc: '讲解公路工程质量检测的常用方法与仪器操作' },
+  { name: '路基施工技术规范.pptx',    type: 'PPT',  size: '45MB',  dur: '-',     date: '2026-01-20', desc: '路基施工技术规范解读课件' },
+  { name: '沥青路面施工工艺.mp4',     type: '视频', size: '720MB', dur: '38:15', date: '2026-02-10', desc: '沥青路面摊铺与压实工艺全流程演示' },
+  { name: '公路养护质量评定标准.pdf', type: '文档', size: '8MB',   dur: '-',     date: '2026-02-18', desc: 'JTG 5142 公路养护质量评定标准文件' },
+  { name: '路面检测实操演示.mp4',     type: '视频', size: '1.1GB', dur: '55:30', date: '2026-03-05', desc: '路面弯沉、平整度、构造深度检测实操' },
+  { name: '养护工程施工组织设计.pptx',type: 'PPT',  size: '32MB',  dur: '-',     date: '2026-03-12', desc: '养护工程施工组织设计编制要点' }
+];
+
+// 课程包（含章节结构）
+let packages = [
+  {
+    id: 1,
+    name: '2026年公路养护工继续教育课程包',
+    desc: '面向全省公路养护工的年度继续教育课程，涵盖养护基础理论、桥梁养护与施工安全三大模块。',
+    linkedClasses: 2,
+    sections: [
+      { name: '第一节：公路养护基础理论', collapsed: false, items: [
+        { type: 'video',    name: '公路工程质量检测技术', hours: 6 },
+        { type: 'doc',      name: '路基施工技术规范',     hours: 2 },
+        { type: 'exercise', name: '章节练习一',           hours: 1 }
+      ]},
+      { name: '第二节：桥梁养护技术', collapsed: false, items: [
+        { type: 'video',    name: '桥梁养护与维修实务',   hours: 8 },
+        { type: 'exercise', name: '章节练习二',           hours: 1 },
+        { type: 'exam',     name: '阶段考核一',           hours: 1 }
+      ]},
+      { name: '第三节：道路施工安全', collapsed: false, items: [
+        { type: 'video',    name: '道路施工安全管理规范', hours: 6 },
+        { type: 'video',    name: '隧道施工安全要点',     hours: 5 },
+        { type: 'exercise', name: '章节练习三',           hours: 1 }
+      ]}
+    ]
+  },
+  {
+    id: 2,
+    name: '道路施工安全管理课程包',
+    desc: '道路与隧道施工现场安全管理专项培训课程。',
+    linkedClasses: 1,
+    sections: [
+      { name: '第一节：施工安全法规', collapsed: false, items: [
+        { type: 'video',    name: '道路施工安全管理规范', hours: 10 },
+        { type: 'video',    name: '安全生产法解读',       hours: 6 },
+        { type: 'exercise', name: '章节练习一',           hours: 1 }
+      ]},
+      { name: '第二节：现场安全管控', collapsed: false, items: [
+        { type: 'video', name: '隧道施工安全要点', hours: 9 },
+        { type: 'exam',  name: '阶段考核一',       hours: 4 }
+      ]}
+    ]
+  },
+  {
+    id: 3,
+    name: '公路养护技术提升课程包',
+    desc: '面向骨干养护技术人员的能力提升课程（尚未关联班级）。',
+    linkedClasses: 0,
+    sections: [
+      { name: '第一节：养护新技术', collapsed: false, items: [
+        { type: 'video', name: '路面检测实操演示',   hours: 8 },
+        { type: 'video', name: '沥青路面再生技术',   hours: 6 }
+      ]},
+      { name: '第二节：养护质量管理', collapsed: false, items: [
+        { type: 'doc',  name: '公路养护质量评定标准', hours: 6 },
+        { type: 'exam', name: '综合考核',             hours: 4 }
+      ]}
+    ]
+  }
+];
+
+// 培训班
+let classes = [
+  { id: 1, name: '2026年公路养护工继续教育第一期', year: 2026, start: '2026-03-01', end: '2026-06-30', pkgId: 1, students: 86, status: '进行中' },
+  { id: 2, name: '2026年公路养护工继续教育第二期', year: 2026, start: '2026-07-01', end: '2026-10-31', pkgId: 1, students: 72, status: '未开始' }
+];
+
+// 学员基础名单（用于查看学员/学习进度演示数据）
+const STUDENT_NAMES = ['陈志远','刘敏','张伟','李国强','王芳','赵鹏飞','孙丽华','周建斌','吴晓东','郑雅婷','冯建军','蒋海燕','沈立','韩雪梅','杨帆'];
+const STUDENT_UNITS = ['杭州市公路养护中心','宁波市公路管理局','温州市交通工程公司','绍兴市公路养护处','嘉兴市路桥工程公司','湖州市公路管理中心','金华市交通建设集团','衢州市公路养护所','舟山市路桥管理处','台州市公路工程公司','丽水市公路养护中心','省交通工程质监局','浙江公路技师学院','中交三航局宁波分公司','浙江交投养护集团'];
+
+let editingPkgId = null;          // 正在编辑的课程包 id
+let addCourseTargetSec = null;    // 添加课程目标节索引
+let addExerciseTargetSec = null;
+let addExamTargetSec = null;
+let courseSelSet = new Set();     // 添加课程弹窗中已选资源
+let viewingClsId = null;          // 查看学员的班级 id
+let importClsId = null;           // 导入学员的班级 id
+let nextResId = 100, nextPkgId = 100, nextClsId = 100;
+
+/* ============================================================
+   工具函数
+   ============================================================ */
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function toast(msg, type) {
+  const wrap = document.getElementById('toast-wrap');
+  const el = document.createElement('div');
+  el.className = 'toast' + (type ? ' ' + type : '');
+  const icon = type === 'err' ? '&#9888;&#65039;' : (type === 'info' ? '&#8505;&#65039;' : '&#9989;');
+  el.innerHTML = '<span>' + icon + '</span><span>' + esc(msg) + '</span>';
+  wrap.appendChild(el);
+  setTimeout(() => { el.classList.add('hide'); setTimeout(() => el.remove(), 320); }, 2400);
+}
+function openModal(id) { document.getElementById(id).classList.add('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+function openDrawer(id) {
+  document.getElementById(id).classList.add('show');
+  const mask = document.getElementById(id + '-mask');
+  if (mask) mask.classList.add('show');
+}
+function closeDrawer(id) {
+  document.getElementById(id).classList.remove('show');
+  const mask = document.getElementById(id + '-mask');
+  if (mask) mask.classList.remove('show');
+}
+// 点击遮罩关闭
+document.querySelectorAll('.modal-mask').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('show'); });
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-mask.show').forEach(m => m.classList.remove('show'));
+    document.querySelectorAll('.drawer.show').forEach(d => closeDrawer(d.id));
+  }
+});
+function progressClass(pct) {
+  if (pct <= 0) return 'pg-gray';
+  if (pct < 50) return 'pg-orange';
+  if (pct < 80) return 'pg-blue';
+  return 'pg-green';
+}
+function progressBarHtml(pct, mini) {
+  return '<div class="progress-cell">' +
+    '<div class="progress' + (mini ? ' mini-progress' : '') + '"><div class="progress-inner ' + progressClass(pct) + '" data-w="' + pct + '"></div></div>' +
+    '<span class="pct">' + pct + '%</span></div>';
+}
+// 让进度条动画（渲染后调用）
+function animateBars(scope) {
+  const root = scope || document;
+  const bars = root.querySelectorAll('.progress-inner[data-w]');
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    bars.forEach(b => { b.style.width = b.getAttribute('data-w') + '%'; });
+  }));
+}
+function pkgStats(pkg) {
+  let courses = 0, hours = 0;
+  pkg.sections.forEach(s => s.items.forEach(it => { courses++; hours += Number(it.hours) || 0; }));
+  return { courses, hours: Math.round(hours * 10) / 10 };
+}
+function secHours(sec) {
+  return Math.round(sec.items.reduce((a, it) => a + (Number(it.hours) || 0), 0) * 10) / 10;
+}
+function typeIcon(type) {
+  if (type === 'video') return '&#127916;';
+  if (type === 'doc') return '&#128196;';
+  if (type === 'exercise') return '&#128221;';
+  return '&#128203;';
+}
+function typeLabel(type) {
+  return { video: '视频课程', doc: '文档课件', exercise: '练习', exam: '考核' }[type] || type;
+}
+
+/* ============================================================
+   页面切换
+   ============================================================ */
+function switchPage(page, navEl) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  if (navEl) navEl.classList.add('active');
+  else document.querySelector('.nav-item[data-page="' + page + '"]').classList.add('active');
+  // 各页面渲染
+  if (page === 'profile') renderProfileStats();
+  if (page === 'resources') renderResources();
+  if (page === 'packages') { showPkgList(); renderPkgGrid(); }
+  if (page === 'classes') { showClsList(); renderClasses(); }
+  if (page === 'progress') { fillProgressSelects(); renderProgressPage(); }
+  document.querySelector('.main').scrollTop = 0;
+}
+
+function doLogout() {
+  if (confirm('确定要退出登录吗？')) toast('已安全退出（演示环境）', 'info');
+}
+
+/* ============================================================
+   页面1：个人信息
+   ============================================================ */
+function renderProfileStats() {
+  document.getElementById('stat-pkg').textContent = packages.length;
+  document.getElementById('stat-cls').textContent = classes.length;
+  document.getElementById('stat-res').textContent = resources.length;
+}
+function savePassword() {
+  const o = document.getElementById('pwd-old').value.trim();
+  const n = document.getElementById('pwd-new').value.trim();
+  const c = document.getElementById('pwd-confirm').value.trim();
+  if (!o) return toast('请输入原密码', 'err');
+  if (n.length < 8 || n.length > 20) return toast('新密码须为 8-20 位', 'err');
+  if (!/[A-Za-z]/.test(n) || !/[0-9]/.test(n)) return toast('新密码须同时包含字母和数字', 'err');
+  if (n !== c) return toast('两次输入的新密码不一致', 'err');
+  document.getElementById('pwd-old').value = '';
+  document.getElementById('pwd-new').value = '';
+  document.getElementById('pwd-confirm').value = '';
+  toast('密码修改成功，下次登录请使用新密码');
+}
+
+/* ============================================================
+   页面2：我的资源库
+   ============================================================ */
+function resTypeTag(t) {
+  if (t === '视频') return '<span class="tag tag-blue">视频</span>';
+  if (t === 'PPT') return '<span class="tag tag-orange">PPT</span>';
+  return '<span class="tag tag-purple">文档</span>';
+}
+function renderResources() {
+  document.getElementById('res-count').textContent = resources.length;
+  const tb = document.getElementById('res-tbody');
+  if (!resources.length) {
+    tb.innerHTML = '<tr><td colspan="6"><div class="empty"><div class="e-icon">&#128193;</div>暂无资源，点击右上角"上传资源"开始</div></td></tr>';
+    return;
+  }
+  tb.innerHTML = resources.map((r, i) =>
+    '<tr>' +
+      '<td style="font-weight:500;">' + typeIcon(r.type === '视频' ? 'video' : 'doc') + ' ' + esc(r.name) + '</td>' +
+      '<td>' + resTypeTag(r.type) + '</td>' +
+      '<td>' + esc(r.size) + '</td>' +
+      '<td>' + esc(r.dur) + '</td>' +
+      '<td>' + esc(r.date) + '</td>' +
+      '<td>' +
+        '<button class="link-btn" onclick="previewResource(' + i + ')">预览</button>' +
+        '<button class="link-btn" onclick="openEditResource(' + i + ')">编辑</button>' +
+        '<button class="btn-danger-text" onclick="deleteResource(' + i + ')">删除</button>' +
+      '</td>' +
+    '</tr>').join('');
+}
+
+// —— 当前登录教师信息 ——
+const ME = { name:'王建国', unit:'浙江省交通科学研究院', intro:'教授，长期从事公路工程质量检测与养护技术研究，主持多项省部级重点课题。' };
+
+// —— 上传资源 ——
+let editingResIdx = -1; // -1 = 新上传
+let UP_AUTO = { type:'', size:'', dur:'', date:'' };
+function fmtSize(bytes) {
+  if (!bytes || isNaN(bytes)) return '';
+  if (bytes >= 1073741824) return (bytes/1073741824).toFixed(2) + 'GB';
+  if (bytes >= 1048576) return Math.round(bytes/1048576) + 'MB';
+  if (bytes >= 1024) return Math.round(bytes/1024) + 'KB';
+  return bytes + 'B';
+}
+function randDur() {
+  const m = Math.floor(Math.random()*45)+8, s = Math.floor(Math.random()*60);
+  return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+}
+function todayStr() {
+  const t = new Date();
+  return t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0');
+}
+function openUploadModal() {
+  editingResIdx = -1;
+  setResFormMode(false);
+  document.getElementById('up-name').value = '';
+  document.getElementById('up-teacher').value = ME.name;
+  document.getElementById('up-unit').value = ME.unit;
+  document.getElementById('up-intro').value = ME.intro;
+  clearChosenFile();
+  openModal('modal-upload');
+}
+function onFileChosen(input) {
+  if (input.files && input.files[0]) applyChosenFile(input.files[0]);
+}
+function applyChosenFile(file) {
+  const fname = file.name;
+  document.getElementById('upload-chip-name').textContent = fname;
+  document.getElementById('upload-chip').classList.add('show');
+  if (!document.getElementById('up-name').value) {
+    document.getElementById('up-name').value = fname.replace(/\.[^.]+$/, '');
+  }
+  const ext = (fname.match(/\.([^.]+)$/) || [,''])[1].toLowerCase();
+  const isVideo = ['mp4','avi','mov','mkv','flv'].includes(ext);
+  const isPpt = ['ppt','pptx'].includes(ext);
+  const type = isVideo ? '视频' : (isPpt ? 'PPT' : '文档');
+  UP_AUTO = {
+    type: type,
+    size: fmtSize(file.size) || (isVideo ? '512MB' : '12MB'),
+    dur: isVideo ? randDur() : '-',
+    date: todayStr()
+  };
+  document.getElementById('af-type').textContent = UP_AUTO.type;
+  document.getElementById('af-size').textContent = UP_AUTO.size;
+  document.getElementById('af-dur').textContent = UP_AUTO.dur;
+  document.getElementById('af-date').textContent = UP_AUTO.date;
+  document.getElementById('up-auto').classList.add('show');
+  const tip = document.getElementById('up-auto-tip');
+  if (tip) tip.textContent = '已根据所选文件自动识别，无需手动填写。';
+}
+function clearChosenFile() {
+  document.getElementById('upload-chip').classList.remove('show');
+  document.getElementById('file-input').value = '';
+  UP_AUTO = { type:'', size:'', dur:'', date:'' };
+  const auto = document.getElementById('up-auto');
+  if (auto) auto.classList.remove('show');
+  document.getElementById('af-type').textContent = '待上传';
+  document.getElementById('af-size').textContent = '—';
+  document.getElementById('af-dur').textContent = '—';
+  document.getElementById('af-date').textContent = '—';
+  const tip = document.getElementById('up-auto-tip');
+  if (tip) tip.textContent = '尚未选择文件，类型 / 大小 / 时长将在选择文件后自动识别。';
+}
+// 拖拽上传
+(function initDropZone() {
+  const dz = document.getElementById('drop-zone');
+  ['dragenter','dragover'].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.add('dragover'); }));
+  ['dragleave','drop'].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.remove('dragover'); }));
+  dz.addEventListener('drop', e => {
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) applyChosenFile(e.dataTransfer.files[0]);
+  });
+})();
+function confirmUpload() {
+  if (editingResIdx >= 0) return saveResourceEdit();
+  const name = document.getElementById('up-name').value.trim();
+  if (!name) return toast('请填写课程名称', 'err');
+  const chipShown = document.getElementById('upload-chip').classList.contains('show');
+  if (!chipShown && editingResIdx === -1) return toast('请先选择或拖入要上传的文件', 'err');
+  const btn = document.getElementById('upload-confirm-btn');
+  btn.disabled = true; btn.textContent = '上传中…';
+  // 模拟上传进度
+  const prog = document.getElementById('upload-progress');
+  const bar = document.getElementById('upload-progress-bar');
+  const txt = document.getElementById('upload-progress-text');
+  prog.classList.add('show'); bar.style.transition = 'none'; bar.style.width = '0%';
+  let p = 0;
+  const timer = setInterval(() => {
+    p += Math.random() * 22 + 8;
+    if (p >= 100) {
+      p = 100; clearInterval(timer);
+      bar.style.width = '100%'; txt.textContent = '上传完成 100%';
+      setTimeout(() => {
+        prog.classList.remove('show');
+        btn.disabled = false; btn.textContent = '开始上传';
+        finishUpload(name);
+      }, 450);
+    } else {
+      bar.style.transition = 'width .2s'; bar.style.width = p + '%';
+      txt.textContent = '正在上传… ' + Math.floor(p) + '%';
+    }
+  }, 220);
+}
+function finishUpload(name) {
+  const ext = UP_AUTO.type === '视频' ? '.mp4' : (UP_AUTO.type === 'PPT' ? '.pptx' : '.pdf');
+  const full = (/\.[a-z0-9]+$/i.test(name)) ? name : name + ext;
+  resources.unshift({
+    name: full,
+    type: UP_AUTO.type,
+    size: UP_AUTO.size,
+    dur: UP_AUTO.dur,
+    date: UP_AUTO.date || todayStr(),
+    teacher: document.getElementById('up-teacher').value.trim() || ME.name,
+    tUnit: document.getElementById('up-unit').value.trim() || ME.unit,
+    intro: document.getElementById('up-intro').value.trim() || ME.intro
+  });
+  closeModal('modal-upload');
+  renderResources();
+  renderProfileStats();
+  toast('资源「' + name + '」上传成功');
+}
+// —— 预览 ——
+function previewResource(idx) {
+  const r = resources[idx];
+  document.getElementById('preview-title').textContent = '预览 · ' + r.name;
+  const body = document.getElementById('preview-body');
+  if (r.type === '视频') {
+    body.innerHTML =
+      '<div class="preview-stage">' +
+        '<div class="preview-play" onclick="toast(\'演示环境：视频播放功能需服务端支持\',\'info\')">&#9654;</div>' +
+        '<div style="font-size:13px; opacity:.85;">' + esc(r.name) + ' · 时长 ' + esc(r.dur) + '</div>' +
+      '</div>' +
+      '<div class="preview-meta-line"><span>类型：视频</span><span>大小：' + esc(r.size) + '</span><span>时长：' + esc(r.dur) + '</span><span>上传时间：' + esc(r.date) + '</span><span>讲师：' + esc(r.teacher || ME.name) + '</span><span>单位：' + esc(r.tUnit || ME.unit) + '</span></div>' +
+      ((r.intro || r.desc) ? '<div class="hint" style="margin-top:10px;">讲师简介：' + esc(r.intro || r.desc) + '</div>' : '');
+  } else {
+    body.innerHTML =
+      '<div class="preview-stage" style="background:#EEF2F7;">' +
+        '<div class="doc-page-mock">' +
+          '<div class="doc-page"><div class="ttl"></div><div class="ln"></div><div class="ln w80"></div><div class="ln"></div><div class="ln w60"></div><div class="ln w80"></div></div>' +
+          '<div class="doc-page"><div class="ttl"></div><div class="ln w80"></div><div class="ln"></div><div class="ln w60"></div><div class="ln"></div><div class="ln w80"></div></div>' +
+          '<div class="doc-page"><div class="ttl"></div><div class="ln"></div><div class="ln w60"></div><div class="ln w80"></div><div class="ln"></div><div class="ln w60"></div></div>' +
+        '</div>' +
+        '<div style="font-size:13px; color:#7A8699; margin-top:14px;">' + (r.type === 'PPT' ? '课件' : '文档') + '预览（示意）</div>' +
+      '</div>' +
+      '<div class="preview-meta-line"><span>类型：' + esc(r.type) + '</span><span>大小：' + esc(r.size) + '</span><span>上传时间：' + esc(r.date) + '</span><span>讲师：' + esc(r.teacher || ME.name) + '</span><span>单位：' + esc(r.tUnit || ME.unit) + '</span></div>' +
+      ((r.intro || r.desc) ? '<div class="hint" style="margin-top:10px;">讲师简介：' + esc(r.intro || r.desc) + '</div>' : '');
+  }
+  openDrawer('drawer-preview');
+}
+// —— 编辑（复用上传弹窗，字段与上传一致）——
+function setResFormMode(editing) {
+  document.getElementById('drop-zone').style.display = editing ? 'none' : '';
+  document.getElementById('file-input').value = '';
+  document.getElementById('upload-modal-title').textContent = editing ? '编辑资源信息' : '上传资源';
+  document.getElementById('upload-confirm-btn').textContent = editing ? '保存修改' : '开始上传';
+}
+function openEditResource(idx) {
+  const r = resources[idx];
+  editingResIdx = idx;
+  setResFormMode(true);
+  // 名称去掉扩展名展示
+  document.getElementById('up-name').value = String(r.name || '').replace(/\.[^.]+$/, '');
+  document.getElementById('up-teacher').value = r.teacher || ME.name;
+  document.getElementById('up-unit').value = r.tUnit || ME.unit;
+  document.getElementById('up-intro').value = r.intro || r.desc || '';
+  // 已选文件条：展示现有文件名（只读，不可在此更换文件）
+  document.getElementById('upload-chip-name').textContent = r.name + '（如需更换文件请删除后重新上传）';
+  document.getElementById('upload-chip').classList.add('show');
+  // 系统自动项 = 现有资源属性
+  UP_AUTO = { type: r.type, size: r.size, dur: r.dur, date: r.date };
+  document.getElementById('af-type').textContent = UP_AUTO.type;
+  document.getElementById('af-size').textContent = UP_AUTO.size;
+  document.getElementById('af-dur').textContent = UP_AUTO.dur;
+  document.getElementById('af-date').textContent = UP_AUTO.date;
+  document.getElementById('up-auto').classList.add('show');
+  const tip = document.getElementById('up-auto-tip');
+  if (tip) tip.textContent = '文件类型 / 大小 / 时长 / 上传时间由文件本身决定，编辑信息时保持不变。';
+  openModal('modal-upload');
+}
+function saveResourceEdit() {
+  const idx = editingResIdx;
+  if (idx < 0) return;
+  const r = resources[idx];
+  const name = document.getElementById('up-name').value.trim();
+  if (!name) return toast('请填写课程名称', 'err');
+  const ext = (String(r.name).match(/\.[^.]+$/) || [''])[0];
+  r.name = name + ext;
+  r.teacher = document.getElementById('up-teacher').value.trim() || ME.name;
+  r.tUnit = document.getElementById('up-unit').value.trim() || ME.unit;
+  r.intro = document.getElementById('up-intro').value.trim();
+  r.desc = r.intro;
+  // 类型/大小/时长/上传时间保持原值
+  closeModal('modal-upload');
+  editingResIdx = -1;
+  renderResources();
+  toast('资源信息已保存');
+}
+// —— 删除 ——
+function deleteResource(idx) {
+  const r = resources[idx];
+  if (!confirm('确定删除资源「' + r.name + '」吗？\n删除后已引用该资源的课程不受影响。')) return;
+  resources.splice(idx, 1);
+  renderResources();
+  renderProfileStats();
+  toast('资源已删除', 'info');
+}
+
+/* ============================================================
+   页面3：课程包管理 - Level 1 列表
+   ============================================================ */
+function showPkgList() {
+  document.getElementById('pkg-list-view').style.display = '';
+  document.getElementById('pkg-editor-view').style.display = 'none';
+}
+function renderPkgGrid() {
+  const grid = document.getElementById('pkg-grid');
+  if (!packages.length) {
+    grid.innerHTML = '<div class="empty" style="grid-column:1/-1;"><div class="e-icon">&#128218;</div>暂无课程包，点击上方"新建课程包"创建</div>';
+    return;
+  }
+  grid.innerHTML = packages.map(pkg => {
+    const st = pkgStats(pkg);
+    const clsTag = pkg.linkedClasses > 0
+      ? '<span class="tag tag-green">关联 ' + pkg.linkedClasses + ' 个班</span>'
+      : '<span class="tag tag-gray">未关联班级</span>';
+    return '<div class="pkg-card" onclick="openPkgEditor(' + pkg.id + ')">' +
+      '<div class="pkg-card-name">' + esc(pkg.name) + '</div>' +
+      '<div class="pkg-card-meta">' +
+        '<span class="tag tag-blue">' + st.courses + '门课程</span>' +
+        '<span class="tag tag-orange">' + st.hours + '学时</span>' +
+        clsTag +
+      '</div>' +
+      '<div style="font-size:12.5px; color:var(--text-light); margin-bottom:14px; line-height:1.6; height:38px; overflow:hidden;">' + esc(pkg.desc || '暂无描述') + '</div>' +
+      '<div class="pkg-card-foot">' +
+        '<span style="font-size:12px; color:var(--text-light);">' + pkg.sections.length + ' 个节</span>' +
+        '<div class="pkg-card-actions">' +
+          '<button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); openPkgEditor(' + pkg.id + ')">编辑章节</button>' +
+          '<button class="btn btn-danger-text" onclick="event.stopPropagation(); deletePackage(' + pkg.id + ')">删除</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+function openNewPkgModal() {
+  document.getElementById('new-pkg-name').value = '';
+  document.getElementById('new-pkg-desc').value = '';
+  openModal('modal-new-pkg');
+}
+function createPackage() {
+  const name = document.getElementById('new-pkg-name').value.trim();
+  if (!name) return toast('请输入课程包名称', 'err');
+  const pkg = {
+    id: ++nextPkgId,
+    name,
+    desc: document.getElementById('new-pkg-desc').value.trim(),
+    linkedClasses: 0,
+    sections: [{ name: '第一节：请输入节名称', collapsed: false, items: [] }]
+  };
+  packages.push(pkg);
+  closeModal('modal-new-pkg');
+  renderPkgGrid();
+  renderProfileStats();
+  toast('课程包「' + name + '」创建成功');
+  openPkgEditor(pkg.id);
+}
+function deletePackage(id) {
+  const pkg = packages.find(p => p.id === id);
+  if (!pkg) return;
+  if (pkg.linkedClasses > 0) return toast('该课程包已关联培训班，无法删除', 'err');
+  if (!confirm('确定删除课程包「' + pkg.name + '」吗？')) return;
+  packages = packages.filter(p => p.id !== id);
+  renderPkgGrid();
+  renderProfileStats();
+  toast('课程包已删除', 'info');
+}
+
+/* ============================================================
+   页面3：课程包管理 - Level 2 章节结构编辑器
+   ============================================================ */
+function getPkg() { return packages.find(p => p.id === editingPkgId); }
+
+function openPkgEditor(id) {
+  editingPkgId = id;
+  const pkg = getPkg();
+  if (!pkg) return;
+  document.getElementById('pkg-list-view').style.display = 'none';
+  document.getElementById('pkg-editor-view').style.display = '';
+  document.getElementById('pkg-edit-name').value = pkg.name;
+  document.getElementById('pkg-edit-desc').value = pkg.desc || '';
+  document.getElementById('pkg-editor-crumb').textContent = pkg.name;
+  renderSections();
+  document.querySelector('.main').scrollTop = 0;
+}
+function exitPkgEditor() {
+  editingPkgId = null;
+  showPkgList();
+  renderPkgGrid();
+}
+function savePackage() {
+  const pkg = getPkg();
+  if (!pkg) return;
+  const name = document.getElementById('pkg-edit-name').value.trim();
+  if (!name) return toast('课程包名称不能为空', 'err');
+  pkg.name = name;
+  pkg.desc = document.getElementById('pkg-edit-desc').value.trim();
+  document.getElementById('pkg-editor-crumb').textContent = name;
+  // 同步编辑器中折叠状态等（数据已实时写入，此处直接确认）
+  toast('课程包「' + name + '」保存成功');
+  renderPkgGrid();
+}
+function renderSections() {
+  const pkg = getPkg();
+  const box = document.getElementById('sections-container');
+  if (!pkg.sections.length) {
+    box.innerHTML = '<div class="card"><div class="empty"><div class="e-icon">&#128218;</div>还没有"节"，点击下方"＋ 新建节"开始搭建章节结构</div></div>';
+  } else {
+    box.innerHTML = pkg.sections.map((sec, si) => {
+      const items = sec.items.map((it, ii) =>
+        '<div class="course-item">' +
+          '<div class="ci-icon t-' + it.type + '">' + typeIcon(it.type) + '</div>' +
+          '<div class="ci-name">' + esc(it.name) +
+            '<span class="tag tag-gray" style="margin-left:8px;">' + typeLabel(it.type) + '</span></div>' +
+          '<div class="ci-hours"><input type="number" min="0" step="0.5" value="' + it.hours + '" ' +
+            'onchange="updateItemHours(' + si + ',' + ii + ', this.value)" ' +
+            'onfocus="this.select()"><span>学时</span></div>' +
+          '<div class="ci-actions">' +
+            '<button class="icon-btn" title="上移" onclick="moveItem(' + si + ',' + ii + ',-1)">&#9650;</button>' +
+            '<button class="icon-btn" title="下移" onclick="moveItem(' + si + ',' + ii + ',1)">&#9660;</button>' +
+            '<button class="icon-btn" title="预览" onclick="previewItem(' + si + ',' + ii + ')">&#128065;</button>' +
+            '<button class="icon-btn danger" title="移除" onclick="removeItem(' + si + ',' + ii + ')">&#10005;</button>' +
+          '</div>' +
+        '</div>').join('') ||
+        '<div class="empty" style="padding:18px 0; font-size:13px;">本节暂无课程内容，请使用下方按钮添加</div>';
+      return '<div class="sec-card' + (sec.collapsed ? ' collapsed' : '') + '" data-si="' + si + '">' +
+        '<div class="sec-header" onclick="toggleSection(event,' + si + ')">' +
+          '<span class="sec-chevron">&#9660;</span>' +
+          '<span class="sec-index">' + (si + 1) + '</span>' +
+          '<input class="sec-name-input" value="' + esc(sec.name) + '" ' +
+            'onclick="event.stopPropagation()" ' +
+            'onchange="renameSection(' + si + ', this.value)">' +
+          '<span class="sec-hours-tag" id="sec-hours-' + si + '">小计 ' + secHours(sec) + ' 学时 · ' + sec.items.length + ' 项</span>' +
+          '<div class="sec-actions" onclick="event.stopPropagation()">' +
+            '<button class="icon-btn" title="上移节" onclick="moveSection(' + si + ',-1)">&#9650;</button>' +
+            '<button class="icon-btn" title="下移节" onclick="moveSection(' + si + ',1)">&#9660;</button>' +
+            '<button class="icon-btn danger" title="删除节" onclick="removeSection(' + si + ')">&#128465;</button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="sec-body">' + items +
+          '<div class="sec-add-bar">' +
+            '<button class="btn btn-outline btn-sm" onclick="openAddCourseModal(' + si + ')">＋ 添加课程</button>' +
+            '<button class="btn btn-outline btn-sm" onclick="openAddExerciseModal(' + si + ')">＋ 添加练习</button>' +
+            '<button class="btn btn-outline btn-sm" onclick="openAddExamModal(' + si + ')">＋ 添加考核</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+  updateTotalHours();
+}
+function updateTotalHours() {
+  const pkg = getPkg();
+  if (!pkg) return;
+  document.getElementById('pkg-total-hours').textContent = pkgStats(pkg).hours;
+}
+function refreshSecTag(si) {
+  const pkg = getPkg();
+  const el = document.getElementById('sec-hours-' + si);
+  if (el && pkg.sections[si]) {
+    const sec = pkg.sections[si];
+    el.textContent = '小计 ' + secHours(sec) + ' 学时 · ' + sec.items.length + ' 项';
+  }
+  updateTotalHours();
+}
+function toggleSection(e, si) {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
+  const pkg = getPkg();
+  pkg.sections[si].collapsed = !pkg.sections[si].collapsed;
+  const card = document.querySelector('.sec-card[data-si="' + si + '"]');
+  if (card) card.classList.toggle('collapsed', pkg.sections[si].collapsed);
+}
+function renameSection(si, val) {
+  getPkg().sections[si].name = val.trim() || '未命名节';
+}
+function addSection() {
+  const pkg = getPkg();
+  pkg.sections.push({ name: '第' + numToCn(pkg.sections.length + 1) + '节：请输入节名称', collapsed: false, items: [] });
+  renderSections();
+  toast('已新增一节，请编辑节名称并添加内容', 'info');
+}
+function numToCn(n) {
+  const cn = ['零','一','二','三','四','五','六','七','八','九','十'];
+  if (n <= 10) return cn[n];
+  if (n < 20) return '十' + (n % 10 ? cn[n % 10] : '');
+  return String(n);
+}
+function removeSection(si) {
+  const pkg = getPkg();
+  const sec = pkg.sections[si];
+  if (!confirm('确定删除「' + sec.name + '」及其中的 ' + sec.items.length + ' 项内容吗？')) return;
+  pkg.sections.splice(si, 1);
+  renderSections();
+  toast('节已删除', 'info');
+}
+function moveSection(si, dir) {
+  const pkg = getPkg();
+  const ti = si + dir;
+  if (ti < 0 || ti >= pkg.sections.length) return;
+  const tmp = pkg.sections[si];
+  pkg.sections[si] = pkg.sections[ti];
+  pkg.sections[ti] = tmp;
+  renderSections();
+}
+function updateItemHours(si, ii, val) {
+  const v = Math.max(0, Math.round(Number(val) * 2) / 2) || 0;
+  getPkg().sections[si].items[ii].hours = v;
+  // 修正输入框显示
+  const inputs = document.querySelectorAll('.sec-card[data-si="' + si + '"] .ci-hours input');
+  if (inputs[ii]) inputs[ii].value = v;
+  refreshSecTag(si);
+}
+function moveItem(si, ii, dir) {
+  const items = getPkg().sections[si].items;
+  const ti = ii + dir;
+  if (ti < 0 || ti >= items.length) return;
+  const tmp = items[ii]; items[ii] = items[ti]; items[ti] = tmp;
+  renderSections();
+}
+function removeItem(si, ii) {
+  const sec = getPkg().sections[si];
+  const name = sec.items[ii].name;
+  if (!confirm('确定从本节移除「' + name + '」吗？')) return;
+  sec.items.splice(ii, 1);
+  renderSections();
+  toast('已移除「' + name + '」', 'info');
+}
+function previewItem(si, ii) {
+  const it = getPkg().sections[si].items[ii];
+  // 尝试匹配资源库中的同名资源
+  const idx = resources.findIndex(r => r.name.replace(/\.[^.]+$/, '') === it.name);
+  if (idx >= 0) return previewResource(idx);
+  document.getElementById('preview-title').textContent = '预览 · ' + it.name;
+  const body = document.getElementById('preview-body');
+  if (it.type === 'exercise' || it.type === 'exam') {
+    body.innerHTML =
+      '<div class="preview-stage" style="background:linear-gradient(135deg,#F3ECFC,#E8F1FB);">' +
+        '<div style="font-size:44px;">' + typeIcon(it.type) + '</div>' +
+        '<div style="color:var(--text); font-weight:600;">' + esc(it.name) + '</div>' +
+        '<div style="color:var(--text-light); font-size:13px;">' + (it.type === 'exam' ? '考核' : '练习') + ' · ' + it.hours + ' 学时 · 学员在线作答</div>' +
+      '</div>' +
+      '<div class="hint">题目内容来自关联题库，学员提交后系统自动判分。</div>';
+  } else {
+    body.innerHTML =
+      '<div class="preview-stage">' +
+        '<div style="font-size:44px;">' + typeIcon(it.type) + '</div>' +
+        '<div style="font-weight:600;">' + esc(it.name) + '</div>' +
+        '<div style="font-size:13px; opacity:.8;">' + typeLabel(it.type) + ' · ' + it.hours + ' 学时（资源库中未找到同名文件，可能已被重命名）</div>' +
+      '</div>';
+  }
+  openDrawer('drawer-preview');
+}
+
+// —— 添加课程（从资源库选择） ——
+function openAddCourseModal(si) {
+  addCourseTargetSec = si;
+  courseSelSet.clear();
+  document.getElementById('course-search-input').value = '';
+  renderCourseSelectList();
+  openModal('modal-add-course');
+}
+function renderCourseSelectList() {
+  const kw = document.getElementById('course-search-input').value.trim().toLowerCase();
+  const list = document.getElementById('course-select-list');
+  const shown = resources.map((r, i) => ({ r, i })).filter(x => !kw || x.r.name.toLowerCase().includes(kw));
+  if (!shown.length) {
+    list.innerHTML = '<div class="empty" style="padding:26px 0;"><div class="e-icon">&#128269;</div>没有匹配的资源</div>';
+  } else {
+    list.innerHTML = shown.map(x => {
+      const checked = courseSelSet.has(x.i);
+      return '<label class="res-select-item' + (checked ? ' checked' : '') + '" data-i="' + x.i + '">' +
+        '<input type="checkbox" ' + (checked ? 'checked' : '') + ' onchange="toggleCourseSel(' + x.i + ', this.checked)">' +
+        '<span style="font-size:18px;">' + typeIcon(x.r.type === '视频' ? 'video' : 'doc') + '</span>' +
+        '<span class="res-sel-info">' +
+          '<span class="res-sel-name">' + esc(x.r.name) + '</span>' +
+          '<span class="res-sel-meta">' + esc(x.r.type) + ' · ' + esc(x.r.size) + (x.r.dur !== '-' ? ' · ' + esc(x.r.dur) : '') + ' · 上传于 ' + esc(x.r.date) + '</span>' +
+        '</span>' +
+      '</label>';
+    }).join('');
+  }
+  document.getElementById('course-sel-count').textContent = courseSelSet.size;
+}
+function toggleCourseSel(i, checked) {
+  if (checked) courseSelSet.add(i); else courseSelSet.delete(i);
+  const el = document.querySelector('.res-select-item[data-i="' + i + '"]');
+  if (el) el.classList.toggle('checked', checked);
+  document.getElementById('course-sel-count').textContent = courseSelSet.size;
+}
+function confirmAddCourses() {
+  if (!courseSelSet.size) return toast('请至少选择一个资源', 'err');
+  const pkg = getPkg();
+  const sec = pkg.sections[addCourseTargetSec];
+  courseSelSet.forEach(i => {
+    const r = resources[i];
+    const type = r.type === '视频' ? 'video' : 'doc';
+    sec.items.push({ type, name: r.name.replace(/\.[^.]+$/, ''), hours: type === 'video' ? 2 : 1 });
+  });
+  const n = courseSelSet.size;
+  closeModal('modal-add-course');
+  courseSelSet.clear();
+  renderSections();
+  toast('已向「' + sec.name + '」添加 ' + n + ' 门课程');
+}
+
+// —— 添加练习 ——
+function openAddExerciseModal(si) {
+  addExerciseTargetSec = si;
+  const pkg = getPkg();
+  const sec = pkg.sections[si];
+  const exCount = sec.items.filter(it => it.type === 'exercise').length + 1;
+  document.getElementById('ex-name').value = '章节练习' + numToCn(exCount);
+  openModal('modal-add-exercise');
+}
+function confirmAddExercise() {
+  const name = document.getElementById('ex-name').value.trim();
+  if (!name) return toast('请输入练习名称', 'err');
+  const cnt = Number(document.getElementById('ex-count').value);
+  const tm = Number(document.getElementById('ex-time').value);
+  const pass = Number(document.getElementById('ex-pass').value);
+  if (!cnt || cnt < 1) return toast('题目数量须大于 0', 'err');
+  if (!tm || tm < 1) return toast('答题时限须大于 0 分钟', 'err');
+  if (isNaN(pass) || pass < 0 || pass > 100) return toast('及格分须在 0-100 之间', 'err');
+  const hours = Number(document.getElementById('ex-hours').value) || 1;
+  const sec = getPkg().sections[addExerciseTargetSec];
+  sec.items.push({
+    type: 'exercise', name, hours,
+    cfg: {
+      bank: document.getElementById('ex-bank').value, count: cnt, time: tm, pass,
+      attempts: document.getElementById('ex-attempts').value
+    }
+  });
+  closeModal('modal-add-exercise');
+  renderSections();
+  toast('练习「' + name + '」已添加到「' + sec.name + '」');
+}
+
+// —— 添加考核 ——
+function openAddExamModal(si) {
+  addExamTargetSec = si;
+  const pkg = getPkg();
+  const sec = pkg.sections[si];
+  const examCount = sec.items.filter(it => it.type === 'exam').length + 1;
+  document.getElementById('exam-name').value = '阶段考核' + numToCn(examCount);
+  openModal('modal-add-exam');
+}
+function confirmAddExam() {
+  const name = document.getElementById('exam-name').value.trim();
+  if (!name) return toast('请输入考核名称', 'err');
+  const cnt = Number(document.getElementById('exam-count').value);
+  const tm = Number(document.getElementById('exam-time').value);
+  const pass = Number(document.getElementById('exam-pass').value);
+  if (!cnt || cnt < 1) return toast('题目数量须大于 0', 'err');
+  if (!tm || tm < 1) return toast('考试时限须大于 0 分钟', 'err');
+  if (isNaN(pass) || pass < 0 || pass > 100) return toast('及格分须在 0-100 之间', 'err');
+  const hours = Number(document.getElementById('exam-hours').value) || 2;
+  const anti = [];
+  if (document.getElementById('exam-anti-random').checked) anti.push('随机组卷');
+  if (document.getElementById('exam-anti-switch').checked) anti.push('切屏限制');
+  if (document.getElementById('exam-anti-face').checked) anti.push('人脸抓拍');
+  if (document.getElementById('exam-anti-copy').checked) anti.push('禁止复制');
+  const sec = getPkg().sections[addExamTargetSec];
+  sec.items.push({
+    type: 'exam', name, hours,
+    cfg: {
+      bank: document.getElementById('exam-bank').value, count: cnt, time: tm, pass,
+      attempts: document.getElementById('exam-attempts').value, anti
+    }
+  });
+  closeModal('modal-add-exam');
+  renderSections();
+  toast('考核「' + name + '」已添加到「' + sec.name + '」');
+}
+
+/* ============================================================
+   页面4：培训班管理
+   ============================================================ */
+function showClsList() {
+  document.getElementById('cls-list-view').style.display = '';
+  document.getElementById('cls-students-view').style.display = 'none';
+}
+function clsStatusTag(s) {
+  if (s === '进行中') return '<span class="tag tag-green">进行中</span>';
+  if (s === '未开始') return '<span class="tag tag-gray">未开始</span>';
+  return '<span class="tag tag-blue">已结束</span>';
+}
+function renderClasses() {
+  const tb = document.getElementById('cls-tbody');
+  if (!classes.length) {
+    tb.innerHTML = '<tr><td colspan="7"><div class="empty"><div class="e-icon">&#127979;</div>暂无培训班，点击右上角"创建培训班"</div></td></tr>';
+    return;
+  }
+  tb.innerHTML = classes.map(c => {
+    const pkg = packages.find(p => p.id === c.pkgId);
+    return '<tr>' +
+      '<td style="font-weight:600;">' + esc(c.name) + '</td>' +
+      '<td>' + c.year + '年</td>' +
+      '<td>' + fmtDate(c.start) + ' - ' + fmtDate(c.end) + '</td>' +
+      '<td>' + (pkg ? '<span class="tag tag-blue">' + esc(pkg.name) + '</span>' : '<span class="tag tag-gray">未关联</span>') + '</td>' +
+      '<td>' + c.students + '人</td>' +
+      '<td>' + clsStatusTag(c.status) + '</td>' +
+      '<td>' +
+        '<button class="link-btn" onclick="viewStudents(' + c.id + ')">查看学员</button>' +
+        '<button class="link-btn" onclick="openImportModal(' + c.id + ')">导入学员</button>' +
+        '<button class="link-btn" onclick="exportClassStudents(' + c.id + ')">导出数据</button>' +
+      '</td>' +
+    '</tr>';
+  }).join('');
+}
+function fmtDate(d) { return d.slice(5).replace('-', '.'); }
+
+// —— 创建培训班 ——
+function openNewClsModal() {
+  document.getElementById('new-cls-name').value = '';
+  const sel = document.getElementById('new-cls-pkg');
+  sel.innerHTML = packages.map(p => '<option value="' + p.id + '">' + esc(p.name) + '</option>').join('');
+  openModal('modal-new-cls');
+}
+function createClass() {
+  const name = document.getElementById('new-cls-name').value.trim();
+  if (!name) return toast('请输入班级名称', 'err');
+  const start = document.getElementById('new-cls-start').value;
+  const end = document.getElementById('new-cls-end').value;
+  if (!start || !end) return toast('请选择起止日期', 'err');
+  if (end < start) return toast('结束日期不能早于开始日期', 'err');
+  const pkgId = Number(document.getElementById('new-cls-pkg').value);
+  const now = new Date().toISOString().slice(0, 10);
+  let status = '未开始';
+  if (start <= now && end >= now) status = '进行中';
+  else if (end < now) status = '已结束';
+  const cls = {
+    id: ++nextClsId, name,
+    year: Number(document.getElementById('new-cls-year').value),
+    start, end, pkgId, students: 0, status
+  };
+  classes.push(cls);
+  const pkg = packages.find(p => p.id === pkgId);
+  if (pkg) pkg.linkedClasses++;
+  closeModal('modal-new-cls');
+  renderClasses();
+  renderProfileStats();
+  toast('培训班「' + name + '」创建成功');
+}
+
+// —— 查看学员（全宽子页面） ——
+// 为每个班级生成稳定的学员演示数据
+function seededRand(seed) {
+  let s = seed % 2147483647;
+  if (s <= 0) s += 2147483646;
+  return function () { s = s * 16807 % 2147483647; return (s - 1) / 2147483646; };
+}
+function hashCode(str) {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) { h = (h * 31 + str.charCodeAt(i)) | 0; }
+  return Math.abs(h) || 7;
+}
+function genClassStudents(cls) {
+  const rand = seededRand(hashCode(cls.name));
+  const n = Math.min(cls.students, 15) || 10;
+  const pkg = packages.find(p => p.id === cls.pkgId);
+  const totalHours = pkg ? pkgStats(pkg).hours : 31;
+  const list = [];
+  for (let i = 0; i < n; i++) {
+    let pct;
+    if (cls.status === '未开始') pct = 0;
+    else if (cls.status === '已结束') pct = Math.floor(rand() * 21) + 80;
+    else {
+      const r = rand();
+      if (r < 0.2) pct = 0;
+      else if (r < 0.5) pct = Math.floor(rand() * 45) + 5;
+      else if (r < 0.8) pct = Math.floor(rand() * 30) + 50;
+      else pct = Math.floor(rand() * 21) + 80;
+    }
+    const doneHours = Math.round(totalHours * pct / 100 * 10) / 10;
+    let examStatus;
+    if (pct >= 100) examStatus = rand() > 0.15 ? '已通过' : '未通过';
+    else if (pct >= 80) examStatus = rand() > 0.5 ? '已通过' : '待考核';
+    else examStatus = '待考核';
+    list.push({
+      name: STUDENT_NAMES[i % STUDENT_NAMES.length],
+      unit: STUDENT_UNITS[(i * 3 + hashCode(cls.name) % 5) % STUDENT_UNITS.length],
+      phone: '1' + (3 + Math.floor(rand() * 6)) + (10 - (i % 3)) + '****' + String(1000 + Math.floor(rand() * 9000)),
+      pct, doneHours, totalHours, examStatus
+    });
+  }
+  return list;
+}
+function viewStudents(clsId) {
+  const cls = classes.find(c => c.id === clsId);
+  if (!cls) return;
+  viewingClsId = clsId;
+  document.getElementById('cls-list-view').style.display = 'none';
+  document.getElementById('cls-students-view').style.display = '';
+  document.getElementById('stu-crumb').textContent = '查看学员 - ' + cls.name;
+  document.getElementById('stu-page-title').textContent = cls.name + ' · 学员名单';
+  const pkg = packages.find(p => p.id === cls.pkgId);
+  document.getElementById('stu-page-sub').textContent =
+    '培训年度：' + cls.year + '年 ｜ 起止时间：' + cls.start + ' 至 ' + cls.end +
+    ' ｜ 关联课程包：' + (pkg ? pkg.name : '未关联') + ' ｜ 班级状态：' + cls.status +
+    '（学员共 ' + cls.students + ' 人，以下展示前 ' + Math.min(cls.students, 15) + ' 人）';
+  const list = genClassStudents(cls);
+  document.getElementById('stu-count').textContent = cls.students;
+  const tb = document.getElementById('cls-stu-tbody');
+  tb.innerHTML = list.map(s => {
+    const examTag = s.examStatus === '已通过' ? '<span class="tag tag-green">已通过</span>'
+      : s.examStatus === '未通过' ? '<span class="tag tag-orange">未通过</span>'
+      : '<span class="tag tag-gray">待考核</span>';
+    return '<tr>' +
+      '<td style="font-weight:600;">' + esc(s.name) + '</td>' +
+      '<td>' + esc(s.unit) + '</td>' +
+      '<td>' + esc(s.phone) + '</td>' +
+      '<td>' + progressBarHtml(s.pct) + '</td>' +
+      '<td>' + s.doneHours + ' / ' + s.totalHours + ' 学时</td>' +
+      '<td>' + examTag + '</td>' +
+    '</tr>';
+  }).join('');
+  animateBars(document.getElementById('cls-students-view'));
+  document.querySelector('.main').scrollTop = 0;
+}
+function exitStudentsView() {
+  viewingClsId = null;
+  showClsList();
+  renderClasses();
+}
+function exportClassStudents(clsId) {
+  const cls = classes.find(c => c.id === clsId);
+  if (!cls) return;
+  const header = ['姓名','单位','手机','学习进度(%)','已完成学时','总学时','考核状态'];
+  const rows = genClassStudents(cls).map(s => [s.name, s.unit, s.phone, s.pct, s.doneHours, s.totalHours, s.examStatus]);
+  const fname = cls.name + '-学员数据';
+  if (downloadXlsx(fname, header, rows)) toast('已导出「' + cls.name + '」学员数据（.xlsx）', 'success');
+  else { downloadCsv(fname, header, rows); toast('未加载 Excel 组件，已导出 CSV 兼容文件', 'info'); }
+}
+function exportStudents() {
+  if (viewingClsId) exportClassStudents(viewingClsId);
+}
+
+// —— 导入学员 ——
+function openImportModal(clsId) {
+  importClsId = clsId;
+  const cls = classes.find(c => c.id === clsId);
+  document.getElementById('import-cls-name').textContent = cls ? cls.name : '';
+  openModal('modal-import-stu');
+}
+function simulateImportFile() {
+  toast('已选择文件：学员名单-2026第一期.xlsx（演示）', 'info');
+}
+function downloadTemplate() {
+  const header = ['姓名','单位','手机号码','身份证号'];
+  const rows = [['张三（示例行，导入前请删除）','××市公路养护中心','13800000000','330100199001010000']];
+  if (downloadXlsx('学员导入模板', header, rows)) toast('模板已下载（.xlsx），请按格式填写学员信息', 'success');
+  else { downloadCsv('学员导入模板', header, rows); toast('模板已下载，请按模板格式填写学员信息'); }
+}
+function confirmImport() {
+  const cls = classes.find(c => c.id === importClsId);
+  closeModal('modal-import-stu');
+  if (!cls) return;
+  const add = Math.floor(Math.random() * 8) + 5;
+  cls.students += add;
+  renderClasses();
+  toast('成功导入 ' + add + ' 名学员到「' + cls.name + '」');
+}
+
+/* ============================================================
+   页面5：学习进度
+   ============================================================ */
+function fillProgressSelects() {
+  const monthSel = document.getElementById('prog-month-select');
+  const clsSel = document.getElementById('prog-cls-select');
+  const prevMonth = monthSel.value;
+  const prevCls = clsSel.value;
+  // 按月过滤班级（业务量大时缩短下拉列表）
+  const months = [...new Set(classes.map(c => (c.start || '').slice(0, 7)))]
+    .filter(Boolean).sort().reverse();
+  monthSel.innerHTML = '<option value="">全部月份（共 ' + classes.length + ' 个班）</option>' +
+    months.map(m => {
+      const [y, mo] = m.split('-');
+      const n = classes.filter(c => (c.start || '').slice(0, 7) === m).length;
+      return '<option value="' + m + '">' + y + '年' + Number(mo) + '月 · ' + n + ' 个班</option>';
+    }).join('');
+  if (months.includes(prevMonth) || prevMonth === '') monthSel.value = prevMonth;
+  const list = monthSel.value ? classes.filter(c => (c.start || '').slice(0, 7) === monthSel.value) : classes;
+  clsSel.innerHTML = list.map(c => '<option value="' + c.id + '">' + esc(c.name) + '</option>').join('');
+  if (prevCls && list.some(c => c.id === Number(prevCls))) clsSel.value = prevCls;
+  syncPkgSelect();
+}
+function syncPkgSelect() {
+  const clsSel = document.getElementById('prog-cls-select');
+  const pkgSel = document.getElementById('prog-pkg-select');
+  const cls = classes.find(c => c.id === Number(clsSel.value));
+  pkgSel.innerHTML = packages.map(p => '<option value="' + p.id + '">' + esc(p.name) + '</option>').join('');
+  if (cls) pkgSel.value = cls.pkgId;
+  renderProgressPage();
+}
+
+function genProgressData(cls, pkg) {
+  const rand = seededRand(hashCode(cls.name + '|' + pkg.name));
+  const sections = pkg.sections.map(s => ({
+    name: s.name.replace(/^第.节[：:]?\s*/, ''),
+    fullName: s.name,
+    hasExam: s.items.some(it => it.type === 'exam'),
+    courseHours: s.items.filter(it => it.type === 'video' || it.type === 'doc').reduce((a, it) => a + (Number(it.hours) || 0), 0)
+  }));
+  const totalHours = Math.round(sections.reduce((a, s) => a + s.courseHours, 0) * 10) / 10;
+  const rows = [];
+  for (let i = 0; i < 15; i++) {
+    const base = cls.status === '未开始' ? 0 : Math.floor(rand() * 101);
+    const secPct = sections.map(() => {
+      if (base === 0) return 0;
+      return Math.max(0, Math.min(100, base + Math.floor(rand() * 41) - 20));
+    });
+    const total = Math.round(secPct.reduce((a, b) => a + b, 0) / secPct.length);
+    // 各节考核成绩：仅在该节设有考核、且学习进度达标时生成
+    const secScore = sections.map((s, si) => {
+      if (!s.hasExam) return null;
+      if (secPct[si] >= 80) return Math.floor(rand() * 26) + 75;
+      if (secPct[si] >= 50) return rand() > 0.4 ? Math.floor(rand() * 31) + 60 : null;
+      return null;
+    });
+    const scored = secScore.filter(v => v !== null);
+    const overall = scored.length ? Math.round(scored.reduce((a, b) => a + b, 0) / scored.length) : null;
+    const doneHours = Math.round(sections.reduce((a, s, si) => a + s.courseHours * secPct[si] / 100, 0) * 10) / 10;
+    rows.push({
+      name: STUDENT_NAMES[i],
+      unit: STUDENT_UNITS[(i * 3 + hashCode(cls.name) % 5) % STUDENT_UNITS.length],
+      secPct, secScore, total, overall, doneHours, totalHours
+    });
+  }
+  return { sections, rows, totalHours };
+}
+function scoreBadgeHtml(v) {
+  if (v === null || v === undefined) return '<span class="score-badge score-none">未考核</span>';
+  return '<span class="score-badge ' + (v >= 60 ? 'score-pass' : 'score-fail') + '">' + v + ' 分</span>';
+}
+function renderProgressPage() {
+  const clsSel = document.getElementById('prog-cls-select');
+  const pkgSel = document.getElementById('prog-pkg-select');
+  const cls = classes.find(c => c.id === Number(clsSel.value));
+  const pkg = packages.find(p => p.id === Number(pkgSel.value));
+  const statsBox = document.getElementById('prog-stats');
+  const thead = document.getElementById('prog-thead');
+  const tbody = document.getElementById('prog-tbody');
+  if (!cls || !pkg) {
+    statsBox.innerHTML = '';
+    thead.innerHTML = '';
+    tbody.innerHTML = '<tr><td><div class="empty"><div class="e-icon">&#128200;</div>暂无数据，请先创建培训班与课程包</div></td></tr>';
+    return;
+  }
+  const data = genProgressData(cls, pkg);
+  const rows = data.rows;
+  const avg = Math.round(rows.reduce((a, r) => a + r.total, 0) / rows.length);
+  const done = rows.filter(r => r.total >= 100).length;
+  const doing = rows.filter(r => r.total > 0 && r.total < 100).length;
+  const notStart = rows.filter(r => r.total === 0).length;
+
+  statsBox.innerHTML =
+    '<div class="stat-card"><div class="stat-icon" style="background:#E8F1FB;">&#128202;</div>' +
+      '<div><div class="stat-num" style="color:var(--primary);">' + avg + '%</div><div class="stat-label">班级平均进度</div></div></div>' +
+    '<div class="stat-card"><div class="stat-icon" style="background:#EDF9E6;">&#9989;</div>' +
+      '<div><div class="stat-num" style="color:var(--green);">' + done + '/' + rows.length + '</div><div class="stat-label">已完成人数</div></div></div>' +
+    '<div class="stat-card"><div class="stat-icon" style="background:#FFF4E5;">&#9203;</div>' +
+      '<div><div class="stat-num" style="color:var(--orange);">' + doing + '</div><div class="stat-label">学习中</div></div></div>' +
+    '<div class="stat-card"><div class="stat-icon" style="background:#F0F2F5;">&#9898;</div>' +
+      '<div><div class="stat-num" style="color:var(--text-light);">' + notStart + '</div><div class="stat-label">未开始</div></div></div>';
+
+  // 主表仅显示总进度、学时与综合成绩，各节明细通过展开查看
+  thead.innerHTML = '<tr><th style="width:40px;"></th><th>姓名</th><th>单位</th>' +
+    '<th style="min-width:200px;">总进度</th><th style="white-space:nowrap;">学时（已学/总）</th><th>综合考核成绩</th><th style="width:110px;">各节明细</th></tr>';
+
+  const detailCols = 7;
+  tbody.innerHTML = rows.map((r, i) => {
+    const detailCards = data.sections.map((s, si) => {
+      const pct = r.secPct[si];
+      const sc = r.secScore[si];
+      return '<div class="sec-card">' +
+        '<div class="sc-name"><span>' + esc(s.name) + '</span>' + (s.hasExam ? '<span class="tag-hase">含考核</span>' : '') + '</div>' +
+        progressBarHtml(pct, true) +
+        '<div class="sc-foot"><span>' + (s.hasExam ? '本节考核成绩' : '本节无考核') + '</span>' + (s.hasExam ? scoreBadgeHtml(sc) : '<span class="score-none">—</span>') + '</div>' +
+      '</div>';
+    }).join('');
+    return '<tr>' +
+      '<td><span class="exp-caret" id="caret-' + i + '" onclick="toggleRow(' + i + ')">&#9654;</span></td>' +
+      '<td style="font-weight:600; white-space:nowrap;">' + esc(r.name) + '</td>' +
+      '<td style="white-space:nowrap;">' + esc(r.unit) + '</td>' +
+      '<td>' + progressBarHtml(r.total) + '</td>' +
+      '<td style="white-space:nowrap;"><b style="color:var(--primary);">' + r.doneHours + '</b><span style="color:var(--text-light);"> / ' + r.totalHours + '</span> 学时</td>' +
+      '<td>' + scoreBadgeHtml(r.overall) + '</td>' +
+      '<td><button class="btn btn-ghost btn-sm" onclick="toggleRow(' + i + ')">展开明细</button></td>' +
+    '</tr>' +
+    '<tr class="detail-row" id="detail-' + i + '" style="display:none;">' +
+      '<td class="detail-cell" colspan="' + detailCols + '"><div class="detail-inner">' +
+        '<div class="di-title">&#128269; ' + esc(r.name) + ' · 各节学习进度与考核成绩</div>' +
+        '<div class="sec-grid">' + detailCards + '</div>' +
+      '</div></td>' +
+    '</tr>';
+  }).join('');
+  animateBars(document.getElementById('page-progress'));
+}
+function toggleRow(i) {
+  const d = document.getElementById('detail-' + i);
+  const c = document.getElementById('caret-' + i);
+  if (!d) return;
+  const open = d.style.display === 'none';
+  d.style.display = open ? '' : 'none';
+  if (c) c.classList.toggle('open', open);
+  if (open) animateBars(d);
+}
+function expandAll(open) {
+  document.querySelectorAll('#prog-tbody .detail-row').forEach(function (row) { row.style.display = open ? '' : 'none'; });
+  document.querySelectorAll('#prog-tbody .exp-caret').forEach(function (c) { c.classList.toggle('open', open); });
+  if (open) animateBars(document.getElementById('prog-tbody'));
+}
+function exportProgress() {
+  const cls = classes.find(c => c.id === Number(document.getElementById('prog-cls-select').value));
+  const pkg = packages.find(p => p.id === Number(document.getElementById('prog-pkg-select').value));
+  if (!cls || !pkg) return toast('暂无可导出的数据', 'err');
+  const data = genProgressData(cls, pkg);
+  const header = ['姓名', '单位'];
+  data.sections.forEach(s => header.push(s.fullName + ' 进度(%)'));
+  data.sections.forEach(s => header.push(s.fullName + ' 考核成绩'));
+  header.push('总进度(%)', '已学学时', '总学时', '综合考核成绩');
+  const rows = data.rows.map(r => {
+    const line = [r.name, r.unit];
+    r.secPct.forEach(p => line.push(p));
+    r.secScore.forEach(v => line.push(v === null ? '未考核' : v));
+    line.push(r.total, r.doneHours, r.totalHours, r.overall === null ? '未考核' : r.overall);
+    return line;
+  });
+  const fname = cls.name + '-学习进度';
+  if (downloadXlsx(fname, header, rows)) toast('学习进度数据已导出为 Excel(.xlsx) 文件', 'success');
+  else { downloadCsv(fname, header, rows); toast('未加载 Excel 组件，已导出 CSV 兼容文件', 'info'); }
+}
+function downloadXlsx(filename, header, rows) {
+  if (!window.XLSX) return false;
+  try {
+    const ws = XLSX.utils.aoa_to_sheet([header].concat(rows));
+    ws['!cols'] = header.map((h, i) => ({ wch: i < 2 ? 14 : 18 }));
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, '学习进度');
+    XLSX.writeFile(wb, filename + '.xlsx');
+    return true;
+  } catch (e) { return false; }
+}
+function downloadCsv(filename, header, rows) {
+  const csv = [header.join(',')].concat(rows.map(r => r.map(c => '"' + String(c).replace(/"/g, '""') + '"').join(','))).join('\r\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename + '.csv';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 200);
+}
+
+/* ============================================================
+   初始化
+   ============================================================ */
+(function init() {
+  renderProfileStats();
+  renderResources();
+  renderPkgGrid();
+  renderClasses();
+})();
+</script>
+</body>
+</html>
